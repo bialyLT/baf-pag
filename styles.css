@@ -35,3 +35,7 @@ img {
 article {
   height: 100%;
 }
+
+.container-img {
+  cursor: pointer;
+}
