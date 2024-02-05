@@ -8,8 +8,8 @@ export default function DropdownPropiedades({ propiedades }) {
                         <summary>Propiedades</summary>
                         <ul className="p-2 lg:menu-sm flex-nowrap">
                             {propiedades.map((p, i) =>
-                                <li>
-                                    <a href={`#propiedad${i}`}>{p.name}</a>
+                                <li key={i}>
+                                    <a href={`#propiedad-${i+1}`}>{p.name}</a>
                                 </li>)}
                         </ul>
                     </details>

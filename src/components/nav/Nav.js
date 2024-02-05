@@ -1,43 +1,7 @@
-import { useState } from "react";
-import ThemeController from "./ThemeController";
+import ThemeController from "../ThemeController";
 import DropdownPropiedades from "./DropdownPropiedades";
 
-export default function Nav() {
-    const [propiedades, setPropiedades] = useState(
-        [
-            {
-                name: 'Propiedad Barrio Fátima Garupá',
-            },
-            {
-                name: 'Propiedad Barrio Aguacates Posadas',
-            },
-            {
-                name: 'Departamento en Zona centrica Posadas Misiones',
-            },
-            {
-                name: 'Propiedad Entre rios',
-            },
-            {
-                name: 'Propiedad Garupa Zona centrica',
-            },
-            {
-                name: 'Lotes en Candelaria Misiones',
-            },
-            {
-                name: 'Propiedad Jardin America',
-            },
-            {
-                name: 'Propiedad tipo Chalet Zona centrica San Vicente',
-            },
-            {
-                name: 'Propiedad con terreno en Zona centrica San Vicente',
-            },
-            {
-                name: 'Lote de 2 Hectareas Eldorado Misiones',  
-            },
-        ]
-    );
-
+export default function Nav({ propiedades }) {
 
 
     return (
