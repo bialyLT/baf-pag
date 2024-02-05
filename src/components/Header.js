@@ -1,4 +1,4 @@
-import bgImageHeader from '../assets/baf-header.jpg';
+import bgImageHeader from '../assets/baf-header.webp';
 export default function Header() {
     return (
 

@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import './App.css';
 import Nav from './components/nav/Nav';
-import Publicacion from './components/Publicacion'
 import Header from './components/Header';
+import Publicaciones from './components/publicaciones/Publicaciones';
 
 function App() {
 
@@ -46,6 +46,7 @@ function App() {
     <div className="App">
       <Nav propiedades={propiedades} />
       <Header />
+      <Publicaciones propiedades={propiedades} />
     </div>
   );
 }

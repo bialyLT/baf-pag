@@ -1,4 +1,4 @@
-import ThemeController from "../ThemeController";
+import ThemeController from "./ThemeController";
 import DropdownPropiedades from "./DropdownPropiedades";
 
 export default function Nav({ propiedades }) {
