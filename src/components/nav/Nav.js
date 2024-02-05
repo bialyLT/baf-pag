@@ -5,7 +5,7 @@ export default function Nav({ propiedades }) {
 
 
     return (
-        <div className="navbar bg-base-100 shadow-lg">
+        <div className="navbar fixed z-[1000] bg-base-100 shadow-lg">
             <div className="navbar-start">
                 <details className="dropdown">
                     <summary tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
