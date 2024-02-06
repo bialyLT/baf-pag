@@ -4,11 +4,12 @@ export default function ThemeController () {
   const [theme, setTheme] = useState('light')
 
   const handleChanged = (e) => {
-    e.target.checked ? setTheme('dark') : setTheme('light')
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
   }
 
   useEffect(() => {
     document.querySelector('html').setAttribute('data-theme', theme)
+    document.querySelector('html').setAttribute('class', theme)
   }, [theme])
 
   return (

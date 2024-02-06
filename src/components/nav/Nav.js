@@ -1,7 +1,7 @@
 import ThemeController from './ThemeController'
 import DropdownPropiedades from './DropdownPropiedades'
 
-export default function Nav ({ propiedades }) {
+const Nav = ({ propiedades }) => {
   return (
     <div className='navbar fixed z-[1000] bg-base-100 shadow-lg'>
       <div className='navbar-start'>
@@ -12,7 +12,7 @@ export default function Nav ({ propiedades }) {
           <DropdownPropiedades propiedades={propiedades} />
         </details>
         <a className='btn btn-ghost text-xl' href='#inicio'>
-          <img class='h-10 w-10 rounded' src='./favicon.ico' alt='BAF Bienes Raices' />
+          <img class='h-10 w-10 rounded' src='./images/favicon.ico' alt='BAF Bienes Raices' />
           BAF Bienes Raices
         </a>
       </div>
@@ -25,3 +25,5 @@ export default function Nav ({ propiedades }) {
     </div>
   )
 }
+
+export default Nav
