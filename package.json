@@ -1,6 +1,7 @@
 {
   "name": "baf-pag-react",
   "version": "0.1.0",
+  "homepage": "https://bafinmobiliaria.github.io/starter-project/",
   "private": true,
   "dependencies": {
     "@heroicons/react": "2.1.1",
@@ -47,7 +48,5 @@
   },
   "standard": {
     "format": true
-  },
-  "homepage": "https://github.com/bialyLT/baf-pag"
-
+  }
 }
