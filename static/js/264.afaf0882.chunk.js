@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbaf_pag_react=self.webpackChunkbaf_pag_react||[]).push([[264],{480:(a,e,s)=>{s.r(e),s.d(e,{default:()=>d});const c=s.p+"static/media/baf-header.1f2c80ae63beb27e7b5a.webp";var t=s(496);const d=function(){return(0,t.jsx)("img",{src:c,className:"max-w-sm rounded-lg shadow-2xl hidden md:block",alt:"header-img"})}}}]);
+//# sourceMappingURL=264.afaf0882.chunk.js.map
