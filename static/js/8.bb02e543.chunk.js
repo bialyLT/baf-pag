@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbaf_pag_react=self.webpackChunkbaf_pag_react||[]).push([[8],{8:(e,t,a)=>{a.r(t),a.d(t,{default:()=>l});var c=a(496);const l=e=>{let{imgLink:t,title:a}=e;return(0,c.jsx)("img",{className:"object-cover object-center w-full h-64 rounded-lg lg:h-80",src:t,alt:a})}}}]);
+//# sourceMappingURL=8.bb02e543.chunk.js.map
