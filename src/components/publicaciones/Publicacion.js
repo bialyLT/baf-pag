@@ -1,9 +1,6 @@
-// import CarruselPropiedad from './CarruselPropiedad'
-
-export default function Publicacion ({ title, imgPortada }) {
+const Publicacion = ({ title, imgPortada }) => {
   return (
-
-    <article className='card w-80 bg-base-100 shadow-2xl image-full'>
+    <>
       <figure><img src={imgPortada} alt='Shoes' /></figure>
       <div className='card-body justify-between'>
         <h2 className='card-title'>{title}</h2>
@@ -15,6 +12,8 @@ export default function Publicacion ({ title, imgPortada }) {
           </button>
         </div>
       </div>
-    </article>
+    </>
   )
 }
+
+export default Publicacion

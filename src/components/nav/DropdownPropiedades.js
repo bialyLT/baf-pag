@@ -3,7 +3,7 @@ export default function DropdownPropiedades ({ propiedades }) {
   return (
     <ul tabIndex={0} className='menu menu-sm dropdown-content lg:menu-horizontal  z-[1] p-2 shadow bg-base-100 rounded-box w-100 flex-nowrap'>
       <li><Link to='/'>Inicio</Link></li>
-      <li><Link to='contacto'>Contacto</Link></li>
+      <li><Link to='/contacto'>Contacto</Link></li>
       <li>
         <details>
           <summary>Propiedades</summary>

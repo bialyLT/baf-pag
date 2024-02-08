@@ -1,6 +1,7 @@
 import ThemeController from './ThemeController'
 import DropdownPropiedades from './DropdownPropiedades'
-import iconoBaf from '../../assets/icon-baf.svg'
+import { Link } from 'react-router-dom'
+import IconBaf from '../icon-baf'
 
 const Nav = ({ propiedades }) => {
   return (
@@ -12,10 +13,10 @@ const Nav = ({ propiedades }) => {
           </summary>
           <DropdownPropiedades propiedades={propiedades} />
         </details>
-        <a className='btn btn-ghost text-xl' href='#inicio'>
-          <img class='h-10 w-10 rounded' src={iconoBaf} alt='BAF Bienes Raices' />
-          BAF Bienes Raices
-        </a>
+        <Link className='btn btn-ghost text-xl' to='/'>
+          <IconBaf />
+          <p className='hidden md:block'>BAF Bienes Raices</p>
+        </Link>
       </div>
       <div className='navbar-center hidden lg:flex'>
         <DropdownPropiedades propiedades={propiedades} />

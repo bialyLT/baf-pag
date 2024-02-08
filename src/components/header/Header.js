@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import Loading from '../Loading'
+import { Link } from 'react-router-dom'
 
 const ImgHeader = lazy(() => import('./ImgHeader'))
 
@@ -16,7 +17,9 @@ export default function Header () {
         <div>
           <h1 className='text-5xl font-bold'>Bienvenido a BAF Bienes Raices!</h1>
           <p className='py-6'>Descubra el hogar de sus sueños con nosotros. Nuestra pasión es encontrar la propiedad perfecta que se adapte a sus necesidades y estilo de vida.</p>
-          <button className='btn btn-ghost'>Ver Propiedades</button>
+          <Link to='/'>
+            <button className='btn btn-ghost'>Ver Propiedades</button>
+          </Link>
         </div>
       </div>
     </header>
