@@ -24,10 +24,10 @@ function Root () {
     <>
       <Routes>
         <Route element={<Main />}>
-          <Route path='/' element={<Home />} />
-          <Route path='/contacto' element={<Contacto />} />
-          <Route path='/propiedades/:propiedadId' element={<VistaPublicacion />} />
-          <Route path='/*' element={<ErrorPage />} />
+          <Route path='/baf-pag/' element={<Home />} />
+          <Route path='/baf-pag/contacto' element={<Contacto />} />
+          <Route path='/baf-pag/propiedades/:propiedadId' element={<VistaPublicacion />} />
+          <Route path='/baf-pag/*' element={<ErrorPage />} />
         </Route>
       </Routes>
     </>
