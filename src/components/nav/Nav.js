@@ -1,5 +1,6 @@
 import ThemeController from './ThemeController'
 import DropdownPropiedades from './DropdownPropiedades'
+import iconoBaf from '../../assets/icon-baf.svg'
 
 const Nav = ({ propiedades }) => {
   return (
@@ -12,7 +13,7 @@ const Nav = ({ propiedades }) => {
           <DropdownPropiedades propiedades={propiedades} />
         </details>
         <a className='btn btn-ghost text-xl' href='#inicio'>
-          <img class='h-10 w-10 rounded' src='./images/favicon.ico' alt='BAF Bienes Raices' />
+          <img class='h-10 w-10 rounded' src={iconoBaf} alt='BAF Bienes Raices' />
           BAF Bienes Raices
         </a>
       </div>
