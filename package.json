@@ -1,7 +1,7 @@
 {
   "name": "baf-pag-react",
   "version": "0.1.0",
-  "homepage": "https://bialylt.github.io/bafbienes-raices",
+  "homepage": "https://bialylt.github.io/baf-pag",
   "private": true,
   "dependencies": {
     "@heroicons/react": "2.1.1",
