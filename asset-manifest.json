@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/baf-pag/static/css/main.5ca00a15.css",
-    "main.js": "/baf-pag/static/js/main.886994fb.js",
+    "main.js": "/baf-pag/static/js/main.f442c839.js",
     "static/js/264.afaf0882.chunk.js": "/baf-pag/static/js/264.afaf0882.chunk.js",
     "static/js/468.f19dcce2.chunk.js": "/baf-pag/static/js/468.f19dcce2.chunk.js",
     "static/js/592.dd3dded9.chunk.js": "/baf-pag/static/js/592.dd3dded9.chunk.js",
@@ -16,16 +16,16 @@
     "static/media/portada-5.webp": "/baf-pag/static/media/portada-5.199309a6f84584a6c9df.webp",
     "static/media/portada-1.webp": "/baf-pag/static/media/portada-1.4aa426692c2c593351e2.webp",
     "static/media/portada-7.webp": "/baf-pag/static/media/portada-7.64519baa9d8fcdbfaf3b.webp",
-    "static/media/icon-baf.svg": "/baf-pag/static/media/icon-baf.e0896bfc42bf3c2f367c486fbe917bb4.svg",
+    "static/media/icon-baf.svg": "/baf-pag/static/media/icon-baf.b566a3372ea6b19b8f9e2852e484fc55.svg",
     "index.html": "/baf-pag/index.html",
     "main.5ca00a15.css.map": "/baf-pag/static/css/main.5ca00a15.css.map",
-    "main.886994fb.js.map": "/baf-pag/static/js/main.886994fb.js.map",
+    "main.f442c839.js.map": "/baf-pag/static/js/main.f442c839.js.map",
     "264.afaf0882.chunk.js.map": "/baf-pag/static/js/264.afaf0882.chunk.js.map",
     "468.f19dcce2.chunk.js.map": "/baf-pag/static/js/468.f19dcce2.chunk.js.map",
     "592.dd3dded9.chunk.js.map": "/baf-pag/static/js/592.dd3dded9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5ca00a15.css",
-    "static/js/main.886994fb.js"
+    "static/js/main.f442c839.js"
   ]
 }
