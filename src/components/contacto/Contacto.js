@@ -49,6 +49,7 @@ const Contacto = () => {
             <p className='mt-2 text-gray-500 dark:text-gray-400'>Lunes a Viernes de 8hs hasta las 19hs.</p>
             <p className='mt-2 text-blue-500 dark:text-blue-400'><a href='https://wa.me/5493764635099?text=Hola' className='link link-ghost link-hover'>+54 9 376 4635099</a></p>
             <p className='mt-2 text-blue-500 dark:text-blue-400'><a href='https://wa.me/5493764736450?text=Hola' className='link link-ghost link-hover'>+54 9 376 4736450</a></p>
+            <p className='mt-2 text-blue-500 dark:text-blue-400'><a href='https://wa.me/5493764657098?text=Hola' className='link link-ghost link-hover'>+54 9 376 4657098</a></p>
           </div>
         </div>
       </div>

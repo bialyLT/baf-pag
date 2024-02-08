@@ -1,7 +1,7 @@
 const Publicacion = ({ title, imgPortada }) => {
   return (
     <>
-      <figure><img src={imgPortada} alt='Shoes' /></figure>
+      <figure><img src={imgPortada} alt={title} /></figure>
       <div className='card-body justify-between'>
         <h2 className='card-title'>{title}</h2>
         <div className='card-actions justify-end'>
