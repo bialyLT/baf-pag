@@ -1,4 +1,4 @@
-import iconBaf from '../assets/icon-baf.svg'
+import iconBaf from '../../assets/icon-baf.svg'
 
 const IconBaf = () => {
   return (

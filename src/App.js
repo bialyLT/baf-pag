@@ -8,9 +8,9 @@ import {
 import Main from './components/main/Main.js'
 import Contacto from './components/contacto/Contacto.js'
 import Home from './components/main/Home.js'
-import VistaPublicacion from './components/publicaciones/VistaPublicacion.js'
-import ErrorPage from './components/ErrorPage.js'
-import Loading from './components/Loading.js'
+import VistaPublicacion from './components/vistaPublicacion/VistaPublicacion.js'
+import ErrorPage from './components/otros/ErrorPage.js'
+import Loading from './components/otros/Loading.js'
 
 const router = createBrowserRouter([
   { path: '/*', Component: Root, loader: Loading, errorElement: <ErrorPage /> }

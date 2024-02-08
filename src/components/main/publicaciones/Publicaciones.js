@@ -11,7 +11,7 @@ export default function Publicaciones ({ propiedades }) {
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:gap-x-1 gap-y-5 justify-items-center lg:grid-cols-3'>
         <Suspense>{propiedades.map((p, i) =>
-          <Link to={`/propiedades/propiedad-${i + 1}`} state={{ propiedad: p.name, id: i + 1 }} key={i} className='card w-80 bg-base-100 shadow-2xl image-full'>
+          <Link to={`/propiedades/propiedad-${i + 1}`} state={{ propiedad: p.name, id: i + 1, cantImgs: p.cantImg }} key={i} className='card w-80 bg-base-100 shadow-2xl image-full'>
             <Publicacion title={p.name} imgPortada={p.portada} />
           </Link>)}
         </Suspense>

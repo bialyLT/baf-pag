@@ -1,10 +1,10 @@
 import { lazy, Suspense } from 'react'
-import Loading from '../Loading'
+import Loading from '../otros/Loading'
 import { Link } from 'react-router-dom'
 
 const ImgHeader = lazy(() => import('./ImgHeader'))
 
-export default function Header () {
+const Header = () => {
   return (
 
     <header className='hero min-h-screen bg-base'>
@@ -26,3 +26,5 @@ export default function Header () {
 
   )
 }
+
+export default Header
