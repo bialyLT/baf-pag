@@ -1,5 +1,9 @@
-export default function Loading () {
+const Loading = () => {
   return (
-    <span className='loading loading-dots loading-md hidden md:block' />
+    <div className='flex justify-center skeleton align-center'>
+      <span className='loading loading-dots loading-md md:block' />
+    </div>
   )
 }
+
+export default Loading

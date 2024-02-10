@@ -3,7 +3,8 @@ import {
   createBrowserRouter,
   Route,
   RouterProvider,
-  Routes
+  Routes,
+  ScrollRestoration
 } from 'react-router-dom'
 import Main from './components/main/Main.js'
 import Contacto from './components/contacto/Contacto.js'
@@ -14,15 +15,16 @@ import Loading from './components/otros/Loading.js'
 
 const router = createBrowserRouter([
   { path: '/*', Component: Root, loader: Loading, errorElement: <ErrorPage /> }
-], { basename: '/baf-pag' })
+])
 
 const App = () => {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} fallbackElement={<Loading />} />
 }
 
 function Root () {
   return (
     <>
+      <ScrollRestoration />
       <Routes>
         <Route element={<Main />}>
           <Route path='/' element={<Home />} />
