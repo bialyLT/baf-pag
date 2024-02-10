@@ -12,7 +12,7 @@ const Publicaciones = ({ propiedades }) => {
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:gap-x-1 gap-y-5 justify-items-center lg:grid-cols-3'>
         {propiedades.map((p, i) =>
-          <Link to={`/propiedades/propiedad-${i + 1}`} state={{ propiedad: p.name, id: i + 1, cantImgs: p.cantImg }} key={i}>
+          <Link to={`/propiedades/propiedad-${i + 1}`} state={{ propiedad: p.name, id: i + 1, cantImgs: p.cantImg, isVendido: p.vendido }} key={i}>
             <Suspense fallback={<Loading />}>
               <Publicacion title={p.name} imgPortada={p.portada} isVendido={p.vendido} />
             </Suspense>
