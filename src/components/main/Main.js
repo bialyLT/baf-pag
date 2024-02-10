@@ -10,8 +10,6 @@ import portada8 from '../../assets/portada-8.webp'
 import portada9 from '../../assets/portada-9.webp'
 import portada10 from '../../assets/portada-10.webp'
 import portada11 from '../../assets/portada-11.webp'
-import portada12 from '../../assets/portada-12.webp'
-import portada13 from '../../assets/portada-13.webp'
 import Nav from '../nav/Nav.js'
 import { Outlet } from 'react-router-dom'
 import Footer from '../footer/Footer.js'
@@ -62,51 +60,37 @@ const Main = () => {
         cantImg: 3
       },
       {
-        name: 'Propiedad en Jardín América',
-        text: 'UBICADA EN EL MICRO-CENTRO DE JARDÍN AMÉRICA VIVIENDA DE MAMPOSTERIA DE LADRILLO, CUBIERTA DE CHAPAS GALVANIZADAS SOBRE TIRANTERIA DE MADERA A LA VISTA, PISOS DE CARPETA CEMENTICIA, REVESTIMIENTO DE PORCELANATO EN ALGUNOS SECTORES DE LA VIVIENDA, CARPINTERIAS DE MADERA Y DE HIERRO; CUENTA CON 7 AMBIENTES, DISTRIBUIDOS DE LA SIGUIENTE MANERA: 2 BAÑOS; 3 HABITACIONES, SALA DE ESTAR-COMEDOR, COCINA, HALL DE ACCESO PRINCIPAL, EMPLAZADA A ESCASOS 300 MTS DE: ESCUELAS (PRIMARIAS Y SECUNDARIAS) PLAZA PRINCIPAL CENTRO CÍVICO JEFATURA DE POLICÍA BANCOS MACRO Y NACIÓN A PASOS DE LA ZONA COMERCIAL DEL CENTRO DE JARDÍN AMÉRICA.-',
-        portada: portada7,
-        vendido: true,
-        cantImg: 6
-      },
-      {
         name: 'Propiedad tipo Chalet en Zona céntrica de San Vicente',
         text: 'INMUEBLE UBICADO SOBRE CALLE ASFALTADA, A ESCASOS METROS DEL COMPLEJO POLIDEPOTIVO MUNICIPA “VERON GALLARDO” Y DEL CLUB “EX ALUMNOS”, EN LA LOCALIDAD DE SAN VICENTE, PROVINCIA DE MISIONES.- MEDIDAS DEL INMUEBLE A TITULO INFORMATIVO: 17 MTS DE FRENTE POR 30 MTS DE FONDO.- TIENE TITULO DE PROPIEDAD, LISTA PARA ESCRITURAR.- CONSTA DE: UNA VIVIENDA UNIFAMILIAR TIPO CHALET DE 12 MTS POR 9 MTS., CONSTA DE:HALL DE ENTRADA, 2 DORMITORIOS, COCINA Y COMEDOR INTEGRADO, LIVING, UN BAÑO, GARAGE, LAVADERO CUBIERTO, TECHO DE CHAPAS DE ZINC, CIELORRASO DE MACHIMBRE, MUROS INTERIORES DE LADRILLOS, ABERTURAS DE ALUMINIO Y DE MADERA. CERRAMIENTO EN TODO EL INMUEBLE.- DOS DEPARTAMENTOS DE 3.80 MTS POR 6,10 MTS CADA UNO, MONOAMBIENTE, CON UN BAÑO.- TAMBIEN TIENE CONSTRUIDO SOBRE LOS DOS MONOAMBIENTES UNA EXCELENTE LOSA QUE MIDE 7,60 MTS POR 6.10 MTS DEAL TODO DESTINO.- CUENTAN CON TODOS LOS SERVICIOS.- VALOR DEL INMUEBLE: 55.000 DOLARES ESTADOUNIDENSES',
-        portada: portada8,
+        portada: portada7,
         vendido: false,
         cantImg: 12
       },
       {
         name: 'Propiedad con terreno en Zona céntrica de San Vicente',
         text: 'INMUEBLE UBICADO EN PLENO CENTRO DE LA LOCALIDAD DE SAN VICENTE, PROVINCIA DE MISIONES (SOBRE CALLE MARIANO MORENO Y COLECTORA, CON SALIDA POR AMBOS LADOS). MEDIDAS DEL INMUEBLE A TITULO INFORMATIVO: 35.21MTS X 36.00MTS DE FONDO Y CONTRAFONDO POR 28.37MTS X 16.82MTS DE FRENTE Y CONTRAFENTRE, AFECTA LA FIGURA DE UN POLIGONO IRREGULAR. TIENE TITULO DE PROPIEDAD, LISTA PARA ESCRITURAR. EL INMUEBLE CONSTA DE: UNA VIVIENDA UNIFAMILIAR DE 8.5 MTS DE FRENTE POR 7.5 MTS DE FONDO CON 2 DORMITORIOS, COCINA Y COMEDOR INTEGRADO, LIVING Y UN BAÑO EN LA PARTE DE ATRÁS DE LA VIVIENDA CONSTA DE UNA TERCERA HABITACIÓN DESTINADA A DEPÓSITO, TECHO DE CHAPAS DE ZINC, CIELORRASO DE MACHIMBRE, MUROS INTERIORES DE LADRILLOS, ABERTURAS DE ALUMINIO Y DE MADERA CUENTAN CON TODOS LOS SERVICIOS QUE HAY EN LA LOCALIDAD UBICADO EN UNA ZONA MUY IMPORTANTE DE LA LOCALIDAD DE SAN VICENTE A 100 MTS DEL COMANDO DE POLICIA Y DEL SEMAFORO DE LA RUTA NA 14, A 200 MTS DE LA RUTA NA 14, A 300 MTS DE LA MUNICIPALIDAD, A CUADRAS DEL JUZGADO Y DE LA ZONA DE BANCOS, A 700 MTS DE LA TERMINAL DE OMNIBUS, ESCUELAS, SUPERMERCADOS, CENTRO DE DIAGNOSTICOS, CERCA DE BARRIOS PRIVADOS SE ACEPTA PERMUTAR POR VEHICULO DE INTERES DEL PROPIETARIO Y COMO PARTE DE PAGO.',
-        portada: portada9,
+        portada: portada8,
         vendido: false,
         cantImg: 10
       },
       {
         name: 'Lote de 2 Hectáreas en Eldorado, Misiones',
         text: 'IDEAL PARA UN EMPRENDIMIENTO TURÍSTICO GRACIAS A SUS CARACTERÍSTICAS NATURALES. VIVIENDA UNIFAMILIAR: CONSTA DE DOS HABITACIONES, LIVING-COMEDOR, BAÑO Y GALERÍA LOS DOS DORMITORIOS SE ENCUENTRAN CUBIERTOS CON PISO PARQUÈ Y CON PLACARES DE MADERA EN EXCELENTE ESTADO EL PREDIO CUENTA CON 2 HECTÁREAS (20000M²) CON UN CURSO DE AGUA QUE ATRAVIESA EL SECTOR ESTE Y UNA IMPORTANTE ARBOLEDA CON ESPECIES NATIVAS E IMPLANTADAS. ACCESO INMEDIATO A LA COSTANERA DE LA CIUDAD CUENTA CON TODOS LOS SERVICIOS SE ENCUENTRA SOBRE LA AVENIDA PRINCIPAL (EN EL KM 1 DE LA CIUDAD DE ELDORADO) Y A ESCASOS 300 MTS DE LA COSTANERA DE LA CIUDAD. TITULO DE PROPIEDAD, LISTA PARA TRANSFERIR.-',
-        portada: portada10,
+        portada: portada9,
         vendido: false,
         cantImg: 12
       },
       {
         name: 'Lote en Villalonga, Garupá, Misiones',
         text: '',
-        portada: portada11,
-        vendido: false,
+        portada: portada10,
+        vendido: true,
         cantImg: 9
       },
       {
         name: 'Cancha de futbol 5 + salon multiuso + Departamentos, Garupá, Misiones',
         text: '',
-        portada: portada12,
-        vendido: true,
-        cantImg: 10
-      },
-      {
-        name: 'Casa en Chacra 32-33 Posadas, Misiones',
-        text: 'Título: ¡¡¡¡¡OPORTUNIDAD IMPERDIBLE EN BARRIO RESIDENCIAL SUR DE POSADAS, A UN PRECIO INCREIBLE POR TIEMPO DETERMINADO!!!!! SE VENDE EXCLUSIVO TERRENO CON DOS INMUEBLES!!!, Y A ESCASOS METROS DEL CENTRO CAPITALINO!!!!       Descripción: SE VENDE EXCLUSIVO Y AMPLIO TERRENO CON UNA VIVIENDA UNIFAMILIAR. Y UN DEPARTAMENTO - Ubicación: Sobre Calle 55 entre Avd. Lavalle y Francisco de Haro, Superficie regular y total: 424 mts2, tiene la forma de un polígono que mide 8,50 mts. por 15,76 mts y25 mts por 16,26 mts. En el terreno hay 2 viviendas construidas (en ambas su estado de conservación es bueno). Vivienda Principal. Cuenta con Hall de ingreso, amplio living, comedor, cocina amoblada con alacena y bajo mesada, TRES dormitorios, 1 baño, lavadero cubierto, amplio patio cubierto con quincho y baño (superficie cubierta: 61,12 nts2).- La Segunda vivienda está ubicada en la parte posterior del terreno, se trata de un Departamento, consta de: 1 dormitorio, 1 baño, cocina, estar y comedor integrado. - Cochera techada.– El terreno cuenta con cerramiento en todo el predio y colocación de rejas en el frente de la propiedad.- Ubicados a: 100 mts de las Avdas. Lavalle y Francisco de Haro y a escasos mts. de la zona céntrica de Posadas, a 100 mts de las paradas de colectivos de transporte público de pasajeros. en el área hay estaciones de servicio, escuelas, supermercados, oficinas públicas como el Registro Provincial de las Personas, centros de salud.- Por ubicación y barrio hace que sea una zona muy atractiva para verdaderos inversionistas.- Cuenta con título de propiedad e impuestos al día y todos los servicios esenciales (agua, luz eléctrica, cloacas). Valor: 70.900 dólares estadounidenses (con incluye comisión por venta y de escrituración)',
-        portada: portada13,
+        portada: portada11,
         vendido: true,
         cantImg: 10
       }
