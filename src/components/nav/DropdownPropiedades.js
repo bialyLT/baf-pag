@@ -10,7 +10,7 @@ const DropdownPropiedades = ({ propiedades }) => {
           <ul className='p-2 lg:menu-sm overflow-auto overflow-x-hidden max-h-[500px]'>
             {propiedades.map((p, i) =>
               <li key={i}>
-                <Link to={`/propiedades/propiedad-${i + 1}`} state={{ propiedad: p.name, id: i + 1, cantImgs: p.cantImg, isVendido: p.vendido }}>{p.name}</Link>
+                <Link to={`/propiedades/propiedad-${i + 1}/`} state={{ propiedad: p.name, id: i + 1, cantImgs: p.cantImg, isVendido: p.vendido }} key={i}>{p.name}</Link>
               </li>)}
           </ul>
         </details>

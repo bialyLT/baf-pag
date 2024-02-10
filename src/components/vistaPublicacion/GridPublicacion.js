@@ -1,17 +1,13 @@
-const GridPublicacion = ({ imgLink, title }) => {
+const GridPublicacion = ({ imgLink, title, idImage, handlePrev, handleNext }) => {
   return (
     <>
-      <button className='btn indicator' onClick={() => document.getElementById(`imagen-${title}`).showModal()}>open modal</button>
-      <img className='object-cover object-center w-auto h-auto rounded-lg' src={imgLink} alt={title} />
-      <dialog id={`imagen-${title}`} className='modal'>
-        <div className='modal-box'>
-          <h3 className='font-bold text-lg text-center pb-5'>Vista Previa</h3>
-          <img className='object-cover object-center w-full h-auto rounded-lg' src={imgLink} alt={title} />
+      <div id={idImage} className='carousel-item relative w-full justify-center'>
+        <img className='object-cover object-center w-auto h-full rounded-lg' src={imgLink} alt={`imagen-${title}`} />
+        <div className='absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2'>
+          <button onClick={handlePrev} className='btn btn-circle'>❮</button>
+          <button onClick={handleNext} className='btn btn-circle'>❯</button>
         </div>
-        <form method='dialog' className='modal-backdrop'>
-          <button>close</button>
-        </form>
-      </dialog>
+      </div>
     </>
   )
 }
