@@ -34,7 +34,7 @@ const Contacto = () => {
 
             <h2 className='mt-4 text-lg font-medium text-gray-800 dark:text-white'>Oficina</h2>
             <p className='mt-2 text-gray-500 dark:text-gray-400'>Tengamos una reunion en persona.</p>
-            <p className='mt-2 text-blue-500 dark:text-blue-400'><a href='https://maps.app.goo.gl/3Fvn118AY8d7JfUd6' className='link link-ghost link-hover'>Santa Fé 1732 Posadas, Misiones</a></p>
+            <p className='mt-2 text-blue-500 dark:text-blue-400'><a href='https://maps.app.goo.gl/3Fvn118AY8d7JfUd6' className='link link-ghost link-hover'>Santa Fé 1793 Posadas, Misiones</a></p>
           </div>
 
           <div className='flex flex-col items-center justify-start text-center'>
