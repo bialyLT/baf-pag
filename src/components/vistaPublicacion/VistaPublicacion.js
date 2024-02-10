@@ -11,7 +11,7 @@ const VistaPublicacion = () => {
 
   useEffect(() => {
     setNumImagenes(state.cantImgs)
-    if (imgLinks.length > state.cantImgs) {
+    if (imgLinks.length !== numImagenes) {
       setCurrentImage(0)
     }
     setImgLinks(Array.from({ length: numImagenes }, (_, i) => `${process.env.PUBLIC_URL}/images/casas/${propiedadId}/${i + 1}.webp`))
