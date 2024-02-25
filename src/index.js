@@ -5,7 +5,7 @@ import * as _ from './config/env';
 
 const app = express();
 const port = process.env.PORT ?? 8006;
-const host = '0.0.0.0'; // localhost
+const host = '0.0.0.0';
 const { connectToDatabase } = require('./database/dbMongo');
 
 async function startApp() {
@@ -13,8 +13,10 @@ async function startApp() {
     await connectToDatabase();
     app.use(cors());
     app.use(express.json());
+    // Configura Express para servir archivos estáticos desde la carpeta 'public'
+    app.use(express.static("public"));
 
-    app.use('/api/ping', (req, res) => res.json({ message: 'pong' })); //
+    app.use('/api/ping', (req, res) => res.json({ message: 'pong' }));
     app.use((_, res) => {
       res.sendStatus(404);
     });
