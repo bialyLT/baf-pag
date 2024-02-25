@@ -11,6 +11,10 @@ exports.getAllPublications = async (orden) => {
             return await publicacionModel.find().sort({ updatedAt: -1 }).lean();
         } else if (orden === 'menosReciente') {
             return await publicacionModel.find().sort({ updatedAt: 1 }).lean();
+        } else if (orden === 'vendido') {
+            return await publicacionModel.find().sort({ isVendido: -1, title: 1 }).lean();
+        } else if (orden === 'novendido') {
+            return await publicacionModel.find().sort({ isVendido: 1, title: 1 }).lean();
         } else {
             // por defecto ubicamos las publicaciones mas recientes primero
             return await publicacionModel.find().sort({ updatedAt: -1 }).lean();

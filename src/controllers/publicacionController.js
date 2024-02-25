@@ -4,7 +4,7 @@ const publicacionSchemaJoi = require('../utils/schemaJoiPublications');
 // controlador para obtener todas las publicaciones
 exports.getAllPublications = async (req, res, next) => {
     try {
-        const publications = await PublicacionService.getAllPublications(req.params.orden);
+        const publications = await PublicacionService.getAllPublications(req.query.orden);
         res.json({ success: true, data: publications });
     } catch (e) {
         next(e);
