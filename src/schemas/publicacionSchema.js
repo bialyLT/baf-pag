@@ -21,7 +21,7 @@ export default publicacionSchema = new Schema({
     },
     portada: {
         type: String,
-        default: 'images/portada/default-img-portada.webp'
+        default: 'images/portadas/default-img-portada.webp'
     },
     linkFacebook: String,
     timestamps: true
