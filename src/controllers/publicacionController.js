@@ -1,13 +1,5 @@
 const PublicacionService = require('../services/publicacionService');
-const Joi = require('joi');
-
-const publicacionSchemaJoi = Joi.object({
-    title: Joi.string().required(),
-    description: Joi.string().required(),
-    images: Joi.array().items(Joi.string()).min(1),
-    portada: Joi.string(),
-    linkFacebook: Joi.string()
-});
+const publicacionSchemaJoi = require('../utils/schemaJoiPublications');
 
 // controlador para obtener todas las publicaciones
 exports.getAllPublications = async (req, res, next) => {

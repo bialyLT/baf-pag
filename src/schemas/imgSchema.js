@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 import imgValidator from "../utils/imgValidator";
 
-export default imgSchema = new Schema({
+const imgSchema = new Schema({
     url: {
         type: String,
         validate: {
@@ -9,3 +11,5 @@ export default imgSchema = new Schema({
         },
     }
 });
+
+module.exports = imgSchema;

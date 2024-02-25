@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import imgSchema from "./imgSchema";
 const { Schema } = mongoose;
 
-export default publicacionSchema = new Schema({
+const publicacionSchema = new Schema({
 
     title: {
         type: String,
@@ -21,8 +21,9 @@ export default publicacionSchema = new Schema({
     },
     portada: {
         type: String,
-        default: 'images/portadas/default-img-portada.webp'
+        default: 'images/portada/default-img-portada.webp'
     },
-    linkFacebook: String,
-    timestamps: true
-});
+    linkFacebook: String
+}, { timestamps: true });
+
+module.exports = publicacionSchema;

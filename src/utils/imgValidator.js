@@ -3,6 +3,8 @@ const validarUrl = (url) => {
     return pattern.test(url);
 };
 
-export default imgValidator = () => {
+const imgValidator = () => {
     return images.every(img => validarUrl(img));
 };
+
+module.exports = imgValidator;

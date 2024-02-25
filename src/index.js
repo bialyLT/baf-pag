@@ -3,6 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import * as _ from './config/env';
 
+import publicacionRoutes from './routes/publicacionRoutes';
+import errorHandlerControllers from './middlewares/errorHandlerControllers';
+
 const app = express();
 const port = process.env.PORT ?? 8006;
 const host = '0.0.0.0';
@@ -17,14 +20,15 @@ async function startApp() {
     app.use(express.static("public"));
 
     app.use('/api/ping', (req, res) => res.json({ message: 'pong' }));
+    app.use('/publicaciones', publicacionRoutes);
+    app.use(errorHandlerControllers);
+
     app.use((_, res) => {
       res.sendStatus(404);
     });
     app.use((error, _, res) => {
       res.sendStatus(500);
     });
-
-    console.log('hola mundo');
 
     app.listen(port, host, () => {
       console.info(`App listening on port ${port}`);
