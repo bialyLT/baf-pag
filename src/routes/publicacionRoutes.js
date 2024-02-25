@@ -5,6 +5,9 @@ const publicacionController = require('../controllers/publicacionController');
 // Ruta para obtener todas las publicaciones
 router.get('/', publicacionController.getAllPublications);
 
+// Ruta para obtener una publicacion
+router.get('/:id', publicacionController.getPublication);
+
 // Ruta para crear una publicacion
 router.post('/', publicacionController.createPublication);
 

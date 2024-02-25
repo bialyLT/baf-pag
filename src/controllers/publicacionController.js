@@ -11,6 +11,16 @@ exports.getAllPublications = async (req, res, next) => {
     }
 };
 
+// controlador para obtener una publicacion por id
+exports.getPublication = async (req, res, next) => {
+    try {
+        const publication = await PublicacionService.getPublication(req.params.id);
+        res.json({ success: true, data: publication });
+    } catch (e) {
+        next(e);
+    }
+};
+
 // controlador para crear una publicacion
 exports.createPublication = async (req, res, next) => {
     try {

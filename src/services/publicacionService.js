@@ -10,6 +10,16 @@ exports.getAllPublications = async () => {
     }
 };
 
+// obtenemos una publicacion por su id
+exports.getPublication = async (id) => {
+    try {
+        return await publicacionModel.findById(id);
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+};
+
 // creamos una publicacion
 exports.createPublication = async (publicationData) => {
     try {
