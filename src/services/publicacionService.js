@@ -1,9 +1,20 @@
 const publicacionModel = require('../models/publicacionModel');
 
 // obtenemos todas las publicaciones
-exports.getAllPublications = async () => {
+exports.getAllPublications = async (orden) => {
     try {
-        return await publicacionModel.find().lean();
+        if (orden === 'titleAsc') {
+            return await publicacionModel.find().sort({ title: 1 }).lean();
+        } else if (orden === 'titleDes') {
+            return await publicacionModel.find().sort({ title: -1 }).lean();
+        } else if (orden === 'masReciente') {
+            return await publicacionModel.find().sort({ updatedAt: -1 }).lean();
+        } else if (orden === 'menosReciente') {
+            return await publicacionModel.find().sort({ updatedAt: 1 }).lean();
+        } else {
+            // por defecto ubicamos las publicaciones mas recientes primero
+            return await publicacionModel.find().sort({ updatedAt: -1 }).lean();
+        }
     } catch (e) {
         console.error(e);
         throw e;
