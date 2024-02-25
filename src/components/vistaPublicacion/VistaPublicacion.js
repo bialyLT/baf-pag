@@ -3,7 +3,9 @@ import { Suspense, lazy, useState, useEffect } from 'react'
 const GridPublicacion = lazy(() => import('./GridPublicacion'))
 
 const VistaPublicacion = () => {
+  // la idea de propiedadid es ordenar las propiedades del 1 a n dependiendo del orden de busqueda en la bd
   const { propiedadId } = useParams()
+  // traemos informacion del componente de navegacion que obtiene la informacion de las propiedades de la bd
   const { state } = useLocation()
   const [currentImage, setCurrentImage] = useState(0)
   const [numImagenes, setNumImagenes] = useState(state.cantImgs)

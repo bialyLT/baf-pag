@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000', // URL del backend
-    timeout: 10000, // Tiempo de espera en milisegundos
-    headers: {
-        'Content-Type': 'application/json'
-    }
+  baseURL: `${process.env.REACT_APP_API_URL}`, // URL del backend
+  timeout: 10000, // Tiempo de espera en milisegundos
+  headers: {
+    'Content-Type': 'application/json'
+  }
 })
 
 export const getPublications = (orden) => api.get(`/publicaciones?orden=${orden}`)

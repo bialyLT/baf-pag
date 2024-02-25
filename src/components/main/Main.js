@@ -117,12 +117,11 @@ const Main = () => {
     ]
   )
 
-  const context = { propiedades }
   return (
     <div className='flex flex-col h-screen justify-between'>
-      <Nav propiedades={propiedades} />
+      <Nav />
       <main className='mb-auto'>
-        <Outlet context={context} />
+        <Outlet />
       </main>
       <Footer />
     </div>

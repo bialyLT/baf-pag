@@ -1,5 +1,5 @@
 import './Footer.css'
-import IconBaf from '../otros/icon-baf'
+import IconBaf from '../otros/IconBaf'
 
 const Footer = () => {
   return (
