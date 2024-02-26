@@ -3,10 +3,10 @@ import {
   Routes
 } from 'react-router-dom'
 import { lazy } from 'react'
-const Main = lazy(() => import('../components/main/Main'))
-const Contacto = lazy(() => import('../components/contacto/Contacto'))
-const Home = lazy(() => import('../components/main/Home'))
-const VistaPublicacion = lazy(() => import('../components/vistaPublicacion/VistaPublicacion'))
+const Main = lazy(() => import('../components/pages/MainPage'))
+const Contacto = lazy(() => import('../components/pages/ContactoPage'))
+const Home = lazy(() => import('../components/pages/HomePage'))
+const VistaPublicacion = lazy(() => import('../components/pages/PublicacionPage'))
 export const AppRoutes = () => (
   <>
     <Routes>

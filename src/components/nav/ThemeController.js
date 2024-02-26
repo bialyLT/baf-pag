@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function ThemeController () {
+export default function ThemeController() {
   const [theme, setTheme] = useState('light')
 
   const handleChanged = (e) => {
