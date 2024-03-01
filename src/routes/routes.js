@@ -1,4 +1,4 @@
-import auth from '../modules/auth/routes';
+const auth = require('../modules/auth/routes');
 
 const routes = [auth];
 

@@ -1,4 +1,4 @@
-const publicacionModel = require('../models/publicacionModel');
+const publicacionModel = require('../models/publications/Publication');
 
 // obtenemos todas las publicaciones
 exports.getAllPublications = async (orden) => {

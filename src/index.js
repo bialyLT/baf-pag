@@ -3,7 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import * as _ from './config/env';
 
-import publicacionRoutes from './modules/publications/routes';
+const publicacionRoutes = require('./modules/publications/routes');
+
 import errorHandlerControllers from './middlewares/errorHandlerControllers';
 import { auth } from './middlewares/auth';
 
@@ -36,5 +37,3 @@ app.use((error, _, res) => {
 app.listen(port, host, () => {
   console.info(`App listening on port ${port}`);
 });
-console.error('Error starting the application:', error);
-process.exit(1);

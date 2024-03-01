@@ -5,7 +5,7 @@ const { getAllPublications,
   createPublication,
   deletePublication,
   updatePublication
-} = require('../controllers/publicacionController');
+} = require('./controller');
 
 // Ruta para obtener todas las publicaciones
 router.get('/', getAllPublications);

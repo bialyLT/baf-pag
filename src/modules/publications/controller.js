@@ -1,5 +1,5 @@
-const PublicacionService = require('../services/publicacionService');
-const publicacionSchemaJoi = require('../utils/schemaJoiPublications');
+const PublicacionService = require('../../services/publicacionService');
+const publicacionSchemaJoi = require('../../utils/schemaJoiPublications');
 
 // controlador para obtener todas las publicaciones
 exports.getAllPublications = async (req, res, next) => {

@@ -9,6 +9,7 @@ const imgSchema = new Schema({
             validator: imgValidator,
             message: props => `${props.value} no es una URL válida para una imagen`
         },
+        trim: true
     }
 });
 
