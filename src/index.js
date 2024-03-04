@@ -4,6 +4,8 @@ import cors from 'cors';
 import * as _ from './config/env';
 
 const publicacionRoutes = require('./modules/publications/routes');
+const publicacionAdminRoutes = require('./modules/publications/adminRoutes');
+const loginRoutes = require('./modules/login/routes');
 
 import errorHandlerControllers from './middlewares/errorHandlerControllers';
 import { auth } from './middlewares/auth';
@@ -21,11 +23,14 @@ connectToDatabase();
 
 app.use(express.static("public"));
 
-// cualquiera puede ver las publicaciones
+// acceso para cualquier persona
 app.use('/api/publicaciones', errorHandlerControllers, publicacionRoutes);
 
+// iniciar sesion como admin
+app.use('/admin-login', errorHandlerControllers, loginRoutes);
+
 // solo la persona administradora puede ver esta ruta
-app.use('/admin/publicaciones', errorHandlerControllers, auth, publicacionRoutes);
+app.use('/admin/publicaciones', auth, publicacionAdminRoutes);
 
 app.use((_, res) => {
   res.sendStatus(404);

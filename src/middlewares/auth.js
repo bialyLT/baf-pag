@@ -1,17 +1,39 @@
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
+const { getUserId } = require('../services/userService');
+const passport = require('passport');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const fs = require('node:fs');
 
-const key = fs.readFileSync('./keys/public.pem');
+const key = fs.readFileSync('./keys/private.pem');
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: key
+};
+
+passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
+  try {
+    const user = await getUserId(jwt_payload.id);
+    if (user) {
+      return done(null, user);
+    } else {
+      // si no existe el usuario y no hay error
+      return done(null, false);
+    }
+  } catch (e) {
+    return done(e, false);
+  }
+}))
 
 export const auth = (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
-    const [, token] = authorization.split(' ');
-    const payload = jwt.verify(token, key);
-    // agregar logica para comprobar que es admin el usuario ingresado
-    req.usr = payload;
-    next();
-  } catch (error) {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
+  passport.authenticate('jwt', { session: false },
+    (e, user, info) => {
+      if (e) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+      }
+      if (!user) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+      }
+      req.usr = user;
+      next();
+    })(req, res, next);
 };
