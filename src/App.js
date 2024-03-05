@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import ErrorPage from './components/otros/ErrorPage.js'
 import Loading from './components/otros/Loading.js'
-import { DatabaseProvider } from './context/DatabaseContext.js'
+import { PublicacionesProvider } from './context/Publicaciones.js'
 import { AppRoutes } from './routes/routes.js'
 import { Suspense } from 'react'
 
@@ -16,11 +16,11 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <DatabaseProvider>
+    <PublicacionesProvider>
       <Suspense fallback={<Loading />}>
         <RouterProvider router={router} fallbackElement={<Loading />} />
       </Suspense>
-    </DatabaseProvider>
+    </PublicacionesProvider>
   )
 }
 

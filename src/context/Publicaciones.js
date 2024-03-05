@@ -1,9 +1,9 @@
 import { createContext, useState, useEffect } from 'react'
-import { loadPublicaciones } from '../helpers/publicacionHelpers.js'
+import { loadPublicaciones } from '../helpers/publicacionsHelpers.js'
 
-export const DatabaseContext = createContext()
+export const PublicacionesContext = createContext()
 
-export const DatabaseProvider = props => {
+export const PublicacionesProvider = props => {
   const [publicaciones, setPublicaciones] = useState([])
 
   useEffect(() => {
@@ -14,8 +14,8 @@ export const DatabaseProvider = props => {
     fetchPublicaciones()
   }, [])
   return (
-    <DatabaseContext.Provider value={{ publicaciones }}>
+    <PublicacionesContext.Provider value={{ publicaciones }}>
       {props.children}
-    </DatabaseContext.Provider>
+    </PublicacionesContext.Provider>
   )
 }
