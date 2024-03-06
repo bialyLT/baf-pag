@@ -1,19 +1,20 @@
 import { Suspense, lazy, useState, useContext, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
 import ButtonLinkFb from '../otros/ButtonLinkFb'
 const GridPublicacion = lazy(() => import('../vistaPublicacion/ImagePublicacionVista'))
 import { PublicationContext } from '../../context/Publicacion'
 
-const PublicacionPage = () => {
-  const { currentPublication, loadPublication } = useContext(PublicationContext);
 
-  console.log(currentPublication)
+const PublicacionPage = () => {
+  let { currentPublication, loadPublication } = useContext(PublicationContext);
+  const [currentImage, setCurrentImage] = useState(0)
+  const location = useLocation()
+  const idPublication = location.state.idPub
 
   useEffect(() => {
-    loadPublication(currentPublication);
-  }, [currentPublication]);
-
-  const [currentImage, setCurrentImage] = useState(0)
+    loadPublication(idPublication)
+  }, [idPublication, currentPublication]);
 
   const handlePrev = () => {
     setCurrentImage(prev => (prev - 1 + currentPublication.images.length) % currentPublication.images.length)

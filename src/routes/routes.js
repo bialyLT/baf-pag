@@ -3,7 +3,6 @@ import {
   Routes
 } from 'react-router-dom'
 import { lazy } from 'react'
-import { PublicationProvider } from '../context/Publicacion'
 const Main = lazy(() => import('../components/pages/MainPage'))
 const Contacto = lazy(() => import('../components/pages/ContactoPage'))
 const Home = lazy(() => import('../components/pages/HomePage'))
@@ -14,10 +13,7 @@ export const AppRoutes = () => (
       <Route element={<Main />}>
         <Route path='/' element={<Home />} />
         <Route path='/contacto' element={<Contacto />} />
-        <Route path='/propiedades/:propiedadId' element={
-          <PublicationProvider>
-            <PublicacionPage />
-          </PublicationProvider>} />
+        <Route path='/propiedades/:propiedadId' element={<PublicacionPage />} />
       </Route>
     </Routes>
   </>

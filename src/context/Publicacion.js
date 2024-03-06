@@ -7,8 +7,8 @@ const PublicationProvider = ({ children }) => {
   const [currentPublication, setCurrentPublication] = useState(null)
 
   const loadPublication = async (idParam) => {
-    const id = await getPublication(idParam)
-    setCurrentPublication(id)
+    const publication = await getPublication(idParam)
+    setCurrentPublication(publication.data.data)
   }
 
   return (

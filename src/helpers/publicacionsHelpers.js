@@ -14,6 +14,7 @@ export const loadPublicaciones = (orden) => {
 export const loadPublication = (id) => {
   try {
     const publication = getPublication(id)
+    console.log(publication)
     return publication
   } catch (e) {
     console.error('Error al cargar la publicacion: ', e);

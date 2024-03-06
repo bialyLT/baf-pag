@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 
-const PublicacionLink = ({ to, children }) => {
+const PublicacionLink = ({ to, children, idPub }) => {
 
   return (
-    <Link to={to}>{children}</Link>
+    <Link
+      to={to}
+      state={{ idPub: idPub }}
+    >{children}</Link>
   );
 };
 
