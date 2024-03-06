@@ -2,6 +2,7 @@ require('@babel/register');
 import express from 'express';
 import cors from 'cors';
 import * as _ from './config/env';
+const path = require('node:path');
 
 const publicacionRoutes = require('./modules/publications/routes');
 const publicacionAdminRoutes = require('./modules/publications/adminRoutes');
@@ -21,7 +22,15 @@ app.use(express.json());
 
 connectToDatabase();
 
-app.use(express.static("public"));
+if (process.env.NODE_ENV === 'production') {
+  // Sirve los archivos estáticos desde el directorio build en producción
+  app.use(express.static(path.join(__dirname, 'build')));
+
+  app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+}
+
 
 // acceso para cualquier persona
 app.use('/api/publicaciones', errorHandlerControllers, publicacionRoutes);
