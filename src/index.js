@@ -24,21 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 
 connectToDatabase();
 
-if (process.env.NODE_ENV === 'development') {
-  // Sirve los archivos estáticos desde el directorio build en producción
-  app.use(express.static(path.join(__dirname, 'public')));
-
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
-} else if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'build')));
-
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  })
-}
-
+// Configuración de middleware para servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 
 // acceso para cualquier persona
 app.use('/api/publicaciones', errorHandlerControllers, publicacionRoutes);
