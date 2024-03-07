@@ -11,7 +11,7 @@ export const loadPublicaciones = (orden) => {
 
 // obtener una publicacion
 
-export const loadPublication = (id) => {
+export const loadPublicationHelper = (id) => {
   try {
     const publication = getPublication(id)
     console.log(publication)

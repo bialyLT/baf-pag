@@ -1,13 +1,12 @@
-import { createContext, useState } from 'react'
-import { getPublication } from '../services/apiPublicacions'
+import { createContext, useState, useEffect } from 'react'
+import { loadPublicationHelper } from '../helpers/publicacionsHelpers'
 
 const PublicationContext = createContext()
 
 const PublicationProvider = ({ children }) => {
   const [currentPublication, setCurrentPublication] = useState(null)
-
   const loadPublication = async (idParam) => {
-    const publication = await getPublication(idParam)
+    const publication = await loadPublicationHelper(idParam)
     setCurrentPublication(publication.data.data)
   }
 

@@ -9,7 +9,7 @@ export const PublicacionesProvider = props => {
   useEffect(() => {
     const fetchPublicaciones = async () => {
       const data = await loadPublicaciones()
-      setPublicaciones(data)
+      setPublicaciones(data.data.data)
     }
     fetchPublicaciones()
   }, [])

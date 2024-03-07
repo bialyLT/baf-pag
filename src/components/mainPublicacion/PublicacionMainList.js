@@ -13,7 +13,7 @@ const PublicacionMainList = () => {
         Propiedades en Venta
       </h1>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:gap-x-1 gap-y-5 justify-items-center lg:grid-cols-3'>
-        {publicaciones.data.data.map((p) =>
+        {publicaciones.map((p) =>
           <PublicacionLink to={`/propiedades/${p._id}/`} idPub={p._id} key={p._id}>
             <Suspense fallback={<Loading />}>
               <PublicacionMainItem title={capitalizeFirstLetter(p.title)} imgPortada={p.portada} isVendido={p.isVendido} />

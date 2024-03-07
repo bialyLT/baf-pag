@@ -1,18 +1,22 @@
 import './App.css'
 import {
   createBrowserRouter,
-  RouterProvider,
-  ScrollRestoration
+  Navigate,
+  RouterProvider
 } from 'react-router-dom'
-import ErrorPage from './components/otros/ErrorPage.js'
 import Loading from './components/otros/Loading.js'
 import { PublicacionesProvider } from './context/Publicaciones.js'
+import { PublicationProvider } from './context/Publicacion.js'
 import { AppRoutes } from './routes/routes.js'
 import { Suspense } from 'react'
-import { PublicationProvider } from './context/Publicacion.js'
 
 const router = createBrowserRouter([
-  { path: '/*', Component: Root, loader: Loading, errorElement: <ErrorPage /> }
+  ...AppRoutes,
+  {
+    path: '/*',
+    element: <Navigate to="/" />,
+    loader: () => Promise.resolve({ redirect: { pathname: '/' } })
+  }
 ])
 
 const App = () => {
@@ -24,15 +28,6 @@ const App = () => {
         </Suspense>
       </PublicationProvider>
     </PublicacionesProvider>
-  )
-}
-
-function Root() {
-  return (
-    <>
-      <ScrollRestoration />
-      <AppRoutes />
-    </>
   )
 }
 
