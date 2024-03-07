@@ -5,6 +5,7 @@ const PublicationContext = createContext()
 
 const PublicationProvider = ({ children }) => {
   const [currentPublication, setCurrentPublication] = useState()
+
   const loadPublication = async (idParam) => {
     if (idParam) {
       const publication = await loadPublicationHelper(idParam)

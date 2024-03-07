@@ -26,7 +26,7 @@ const PublicacionPage = () => {
   }
 
   const data = currentPublication ?
-    (<section className='mt-20 flex flex-col justify-content-center items-center' id={currentPublication._id ? currentPublication._id : ''}>
+    (<section className='mt-20 flex flex-col justify-content-center items-center' id={currentPublication._id}>
       <div className='container px-6 py-10 mx-auto'>
         <div className='flex items-center text-center flex-col'>
           <span className={` badge badge-xl badge-error text-white ${currentPublication.isVendido ? 'inline-flex' : 'hidden'}`}>Vendido</span>
@@ -38,8 +38,8 @@ const PublicacionPage = () => {
             <GridPublicacion imgLink={currentPublication.images[currentImage]} title={currentPublication.title} idImage={currentImage + 1} handlePrev={handlePrev} handleNext={handleNext} />
           </div>
         </Suspense>
-        <ButtonLinkFb link={currentPublication.linkFacebook} title='Ver publicacion en Facebook' />
       </div>
+      <ButtonLinkFb link={currentPublication.linkFacebook} title='Ver publicacion en Facebook' />
     </section>) : <Loading />
 
   return (

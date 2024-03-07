@@ -7,6 +7,7 @@ import {
 import Loading from './components/otros/Loading.js'
 import { PublicacionesProvider } from './context/Publicaciones.js'
 import { PublicationProvider } from './context/Publicacion.js'
+import { TokenProvider } from './context/tokenAdmin.js'
 import { AppRoutes } from './routes/routes.js'
 import { Suspense } from 'react'
 
@@ -22,9 +23,11 @@ const App = () => {
   return (
     <PublicacionesProvider>
       <PublicationProvider>
-        <Suspense fallback={<Loading />}>
-          <RouterProvider router={router} fallbackElement={<Loading />} />
-        </Suspense>
+        <TokenProvider>
+          <Suspense fallback={<Loading />}>
+            <RouterProvider router={router} fallbackElement={<Loading />} />
+          </Suspense>
+        </TokenProvider>
       </PublicationProvider>
     </PublicacionesProvider>
   )
