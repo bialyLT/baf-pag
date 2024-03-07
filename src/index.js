@@ -20,15 +20,23 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
+
 connectToDatabase();
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
   // Sirve los archivos estáticos desde el directorio build en producción
+  app.use(express.static(path.join(__dirname, 'public')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+} else if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'build')));
 
-  app.get('/*', function (req, res) {
+  app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
+  })
 }
 
 
