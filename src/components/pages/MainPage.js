@@ -1,6 +1,8 @@
 import Nav from '../nav/Nav.js'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import Footer from '../footer/Footer.js'
+import { useContext, useEffect } from 'react'
+import { PublicationContext } from '../../context/Publicacion.js'
 
 const Main = () => {
   return (

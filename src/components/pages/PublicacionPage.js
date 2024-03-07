@@ -1,14 +1,22 @@
-import { Suspense, lazy, useState, useContext } from 'react'
+import { Suspense, lazy, useState, useContext, useEffect } from 'react'
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
 import ButtonLinkFb from '../otros/ButtonLinkFb'
+import Loading from './../otros/Loading'
 const GridPublicacion = lazy(() => import('../vistaPublicacion/ImagePublicacionVista'))
 import { PublicationContext } from '../../context/Publicacion'
+import { useParams } from 'react-router-dom'
+
 
 
 const PublicacionPage = () => {
-  let { currentPublication } = useContext(PublicationContext);
+  let { currentPublication, loadPublication } = useContext(PublicationContext)
+  let { propiedadId } = useParams()
   const [currentImage, setCurrentImage] = useState(0)
-  console.log(currentPublication)
+
+  useEffect(() => {
+    loadPublication(propiedadId)
+  }, []);
+
   const handlePrev = () => {
     setCurrentImage(prev => (prev - 1 + currentPublication.images.length) % currentPublication.images.length)
   }
@@ -17,8 +25,8 @@ const PublicacionPage = () => {
     setCurrentImage(prev => (prev + 1) % currentPublication.images.length)
   }
 
-  return (
-    <section className='mt-20 flex flex-col justify-content-center items-center' id={currentPublication._id}>
+  const data = currentPublication ?
+    (<section className='mt-20 flex flex-col justify-content-center items-center' id={currentPublication._id ? currentPublication._id : ''}>
       <div className='container px-6 py-10 mx-auto'>
         <div className='flex items-center text-center flex-col'>
           <span className={` badge badge-xl badge-error text-white ${currentPublication.isVendido ? 'inline-flex' : 'hidden'}`}>Vendido</span>
@@ -30,9 +38,14 @@ const PublicacionPage = () => {
             <GridPublicacion imgLink={currentPublication.images[currentImage]} title={currentPublication.title} idImage={currentImage + 1} handlePrev={handlePrev} handleNext={handleNext} />
           </div>
         </Suspense>
+        <ButtonLinkFb link={currentPublication.linkFacebook} title='Ver publicacion en Facebook' />
       </div>
-      <ButtonLinkFb link={currentPublication.linkFacebook} title='Ver publicacion en Facebook' />
-    </section>
+    </section>) : <Loading />
+
+  return (
+    <>
+      {data}
+    </>
   )
 }
 

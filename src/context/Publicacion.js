@@ -1,13 +1,15 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState } from 'react'
 import { loadPublicationHelper } from '../helpers/publicacionsHelpers'
 
 const PublicationContext = createContext()
 
 const PublicationProvider = ({ children }) => {
-  const [currentPublication, setCurrentPublication] = useState(null)
+  const [currentPublication, setCurrentPublication] = useState()
   const loadPublication = async (idParam) => {
-    const publication = await loadPublicationHelper(idParam)
-    setCurrentPublication(publication.data.data)
+    if (idParam) {
+      const publication = await loadPublicationHelper(idParam)
+      setCurrentPublication(publication.data.data)
+    }
   }
 
   return (

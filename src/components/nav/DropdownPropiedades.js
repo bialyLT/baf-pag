@@ -16,7 +16,7 @@ const DropdownPropiedades = () => {
           <ul className='p-2 lg:menu-sm overflow-auto overflow-x-hidden max-h-[500px]'>
             {publicaciones.map((p) =>
               <li key={p._id}>
-                <PublicacionLink to={`/propiedades/${p._id}/`} idPub={p._id} >
+                <PublicacionLink to={`/propiedades/${p._id}/`}>
                   {capitalizeFirstLetter(p.title)}
                 </PublicacionLink>
               </li>

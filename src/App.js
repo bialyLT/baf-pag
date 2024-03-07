@@ -14,8 +14,7 @@ const router = createBrowserRouter([
   ...AppRoutes,
   {
     path: '/*',
-    element: <Navigate to="/" />,
-    loader: () => Promise.resolve({ redirect: { pathname: '/' } })
+    element: <Navigate to="/" />
   }
 ])
 

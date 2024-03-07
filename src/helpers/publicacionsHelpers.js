@@ -13,9 +13,10 @@ export const loadPublicaciones = (orden) => {
 
 export const loadPublicationHelper = (id) => {
   try {
-    const publication = getPublication(id)
-    console.log(publication)
-    return publication
+    if (id) {
+      const publication = getPublication(id)
+      return publication
+    }
   } catch (e) {
     console.error('Error al cargar la publicacion: ', e);
   }
