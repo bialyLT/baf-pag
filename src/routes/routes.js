@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import ErrorPage from '../components/otros/ErrorPage'
 import AdminLoginPage from '../components/pages/AdminLoginPage'
+import AdminPanelPage from '../components/pages/AdminPanelPage'
 const Main = lazy(() => import('../components/pages/MainPage'))
 const Contacto = lazy(() => import('../components/pages/ContactoPage'))
 const Home = lazy(() => import('../components/pages/HomePage'))
@@ -26,7 +27,11 @@ export const AppRoutes = [
       {
         path: '/admin',
         element: <AdminLoginPage />
+      },
+      {
+        path: '/admin-panel',
+        element: <AdminPanelPage />
       }
     ]
   }
-];
+]
