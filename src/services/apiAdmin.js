@@ -9,13 +9,15 @@ const api = axios.create({
 })
 
 
-export const getUserAdmin = (dataUser) => {
+export const getUserAdmin = async (dataUser) => {
   try {
-    api.post('/admin-login', dataUser)
+    const res = await api.post('./admin-login', dataUser)
+    return res.data
   } catch (e) {
     if (e.response && e.response.status === 401) {
-      throw new Error('Usuario no autenticado');
+      throw new Error('Usuario y/o contraseña incorrectos')
+    } else {
+      throw new Error('Ocurrio un error inesperado')
     }
-    throw e;
   }
 }

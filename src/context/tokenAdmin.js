@@ -1,31 +1,27 @@
 import { createContext, useState } from 'react'
 import { getAdminUserHelper } from '../helpers/adminHelper'
+import { setAuthToken } from '../services/apiPublicacions'
 
 export const TokenContext = createContext()
 
 export const TokenProvider = ({ children }) => {
-  const [token, setToken] = useState([])
-  const [error, setError] = useState();
-
+  const [error, setError] = useState()
+  const [validate, setValidate] = useState(false);
 
   const getAdminUser = (data) => {
-    try {
-      const tokenReceived = getAdminUserHelper(data)
-      console.log(tokenReceived)
-      if (tokenReceived) {
-        setToken(tokenReceived.data.token)
-      }
-    } catch (e) {
-      if (e.response && e.response.status === 401) {
-        setError('Error de autenticación')
-      } else {
-        setError('Ocurrió un error')
-      }
-    }
+    getAdminUserHelper(data)
+      .then(res => {
+        setAuthToken(res.token)
+        setValidate(true)
+      })
+      .catch(e => {
+        setError(e.message)
+        setValidate(false)
+      })
   }
 
   return (
-    <TokenContext.Provider value={{ token, getAdminUser, error }}>
+    <TokenContext.Provider value={{ getAdminUser, error, setError, validate }}>
       {children}
     </TokenContext.Provider>
   )
