@@ -27,16 +27,15 @@ export function PropiedadCrearForm({propiedad}) {
   const handlePropiedadSubmit = async (data: z.infer<typeof propiedadSchema>) => {
       // Crear FormData para los datos del formulario
       const formData = new FormData();
-      const nameFiles: string[] = [];
       if (!files) return;
       files.forEach(file => {
-        nameFiles.push(file.name);
+        formData.append("imagenes", file.name);
       });
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("linkFacebook", data.linkFacebook || "");
       formData.append("estaVendida", data.estaVendida);
-      formData.append("imagenes", nameFiles);
+      
   
       if (!propiedad) {        
         try {
@@ -59,6 +58,7 @@ export function PropiedadCrearForm({propiedad}) {
           files.forEach(file => {
             formUploadImages.append("file", file);
           });
+          formUploadImages.append('id', data.title)
           
           // Enviar archivos
           const uploadRes = await fetch('/api/upload', {

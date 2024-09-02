@@ -13,14 +13,13 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  console.log('que onda');
     const formData = await req.formData();
   try {
 
     const title = formData.getAll("title")[0] as string;
     const description = formData.getAll("description")[0] as string;
     const linkFacebook = formData.getAll("linkFacebook")[0] as string;
-    const imagenes = formData.getAll("imagenes") as string[];
+    const imagenes: string[] = formData.getAll('imagenes') as string[];
     const estaVendida = formData.getAll("estaVendida")[0] === "true";
 
     // Verifica que los datos necesarios estén presentes

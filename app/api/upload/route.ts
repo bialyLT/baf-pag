@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { normalizeTitle } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -8,7 +9,14 @@ export async function POST(req: Request) {
     const files: File[] = [];
     const fileUploadPromises: Promise<void>[] = [];
 
-   data.forEach( async f => {
+    const propiedadTitle = normalizeTitle(data.getAll('id')[0] as string)
+    console.log(propiedadTitle);
+
+    // Crear la carpeta con el ID de la propiedad si no existe
+    const propertyFolderPath = path.join(process.cwd(), 'public/_static/images/propiedades', propiedadTitle);
+    await mkdir(propertyFolderPath, { recursive: true });
+
+    data.forEach( async f => {
       if (!(f instanceof File)) {
         return NextResponse.json(
           { message: "Debes ingresar un archivo" },
@@ -19,7 +27,8 @@ export async function POST(req: Request) {
       const fileUploadPromise = (async () => {
         const bytes = await f.arrayBuffer();
         const buffer = Buffer.from(bytes);
-        const filePath = path.join(process.cwd(), 'public/uploads', f.name);
+        const filePath = path.join(process.cwd(), 'public/_static/images/propiedades/', propiedadTitle, f.name);
+        console.log(filePath);
         await writeFile(filePath, buffer);
         files.push(f);
       })();
