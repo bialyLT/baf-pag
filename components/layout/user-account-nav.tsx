@@ -61,43 +61,33 @@ export function UserAccountNav() {
                 )}
               </div>
             </div>
-
+            <DropdownMenuSeparator />
             <ul role="list" className="mb-14 mt-1 w-full text-muted-foreground">
               {user.role === "ADMIN" ? (
-                <li className="rounded-lg text-foreground hover:bg-muted">
-                  <Link
-                    href="/admin"
-                    onClick={closeDrawer}
-                    className="flex w-full items-center gap-3 px-2.5 py-2"
-                  >
-                    <Lock className="size-4" />
-                    <p className="text-sm">Admin</p>
-                  </Link>
-                </li>
+                <>
+                  <li className="rounded-lg text-foreground hover:bg-muted">
+                    <Link
+                      href="/panel-de-control"
+                      onClick={closeDrawer}
+                      className="flex w-full items-center gap-3 px-2.5 py-2"
+                      >
+                      <LayoutDashboard className="size-4" />
+                      <p className="text-sm">Panel de control</p>
+                    </Link>
+                  </li>
+                  <li className="rounded-lg text-foreground hover:bg-muted">
+                    <Link
+                      href="/panel-de-control/configuraciones"
+                      onClick={closeDrawer}
+                      className="flex w-full items-center gap-3 px-2.5 py-2"
+                      >
+                      <Settings className="size-4" />
+                      <p className="text-sm">Configuraciones</p>
+                    </Link>
+                  </li>
+                </>
               ) : null}
-
-              <li className="rounded-lg text-foreground hover:bg-muted">
-                <Link
-                  href="/dashboard"
-                  onClick={closeDrawer}
-                  className="flex w-full items-center gap-3 px-2.5 py-2"
-                >
-                  <LayoutDashboard className="size-4" />
-                  <p className="text-sm">Dashboard</p>
-                </Link>
-              </li>
-
-              <li className="rounded-lg text-foreground hover:bg-muted">
-                <Link
-                  href="/dashboard/settings"
-                  onClick={closeDrawer}
-                  className="flex w-full items-center gap-3 px-2.5 py-2"
-                >
-                  <Settings className="size-4" />
-                  <p className="text-sm">Settings</p>
-                </Link>
-              </li>
-
+              <DropdownMenuSeparator />
               <li
                 className="rounded-lg text-foreground hover:bg-muted"
                 onClick={(event) => {
@@ -109,7 +99,7 @@ export function UserAccountNav() {
               >
                 <div className="flex w-full items-center gap-3 px-2.5 py-2">
                   <LogOut className="size-4" />
-                  <p className="text-sm">Log out </p>
+                  <p className="text-sm">Cerrar sesión</p>
                 </div>
               </li>
             </ul>
@@ -142,30 +132,24 @@ export function UserAccountNav() {
         <DropdownMenuSeparator />
 
         {user.role === "ADMIN" ? (
-          <DropdownMenuItem asChild>
-            <Link href="/admin" className="flex items-center space-x-2.5">
-              <Lock className="size-4" />
-              <p className="text-sm">Admin</p>
-            </Link>
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem asChild>
+              <Link href="/panel-de-control" className="flex items-center space-x-2.5">
+                <Lock className="size-4" />
+                <p className="text-sm">Panel de control</p>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/panel-de-control/configuraciones"
+                className="flex items-center space-x-2.5"
+                >
+                <Settings className="size-4" />
+                <p className="text-sm">Configuraciones</p>
+              </Link>
+            </DropdownMenuItem>
+          </>
         ) : null}
-
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="flex items-center space-x-2.5">
-            <LayoutDashboard className="size-4" />
-            <p className="text-sm">Dashboard</p>
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard/settings"
-            className="flex items-center space-x-2.5"
-          >
-            <Settings className="size-4" />
-            <p className="text-sm">Settings</p>
-          </Link>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer"
@@ -178,7 +162,7 @@ export function UserAccountNav() {
         >
           <div className="flex items-center space-x-2.5">
             <LogOut className="size-4" />
-            <p className="text-sm">Log out </p>
+            <p className="text-sm">Cerrar sesión</p>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

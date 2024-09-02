@@ -1,120 +1,102 @@
-"use client";
+"use client"
+ 
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, useContext } from "react";
+import Link from "next/link"
+ 
+import { cn } from "@/lib/utils"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+import { Icons } from "../shared/icons"
+import MaxWidthWrapper from "../shared/max-width-wrapper"
+import { useScroll } from "@/hooks/use-scroll"
+import { useSelectedLayoutSegment } from "next/navigation"
+import { siteConfig } from "@/config/site"
+import { useSession } from "next-auth/react"
+import { Button } from "../ui/button"
+import { ModalContext } from "../modals/providers"
+import { Skeleton } from "../ui/skeleton";
+import { ModeToggle } from "./mode-toggle";
+import { UserAccountNav } from "./user-account-nav";
 
-import { useContext } from "react";
-import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
-import { useSession } from "next-auth/react";
-
-import { docsConfig } from "@/config/docs";
-import { marketingConfig } from "@/config/marketing";
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-import { useScroll } from "@/hooks/use-scroll";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { DocsSearch } from "@/components/docs/search";
-import { ModalContext } from "@/components/modals/providers";
-import { Icons } from "@/components/shared/icons";
-import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
-
-interface NavBarProps {
+interface NavbarProps {
   scroll?: boolean;
   large?: boolean;
+  propiedades;
 }
 
-export function NavBar({ scroll = false }: NavBarProps) {
+export function Navbar({ scroll = false, propiedades }: NavbarProps) {
   const scrolled = useScroll(50);
+  const selectedLayout = useSelectedLayoutSegment();
+  const documentation = selectedLayout === "docs";
   const { data: session, status } = useSession();
   const { setShowSignInModal } = useContext(ModalContext);
 
-  const selectedLayout = useSelectedLayoutSegment();
-  const documentation = selectedLayout === "docs";
-
-  const configMap = {
-    docs: docsConfig.mainNav,
-  };
-
-  const links =
-    (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav;
-
   return (
     <header
-      className={`sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all ${
-        scroll ? (scrolled ? "border-b" : "bg-transparent") : "border-b"
-      }`}
+    className={`sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all ${
+      scroll ? (scrolled ? "border-b" : "bg-transparent") : "border-b"
+    }`}
+  >
+    <MaxWidthWrapper
+      className="hidden md:flex h-14 items-center justify-between py-4 max-w-full"
+      large={documentation}
     >
-      <MaxWidthWrapper
-        className="flex h-14 items-center justify-between py-4"
-        large={documentation}
-      >
-        <div className="flex gap-6 md:gap-10">
-          <Link href="/" className="flex items-center space-x-1.5">
-            <Icons.logo />
-            <span className="font-urban text-xl font-bold">
-              {siteConfig.name}
-            </span>
+      {/* logo */}
+      <Link href="/" className="flex items-center space-x-1.5">
+        <Icons.logo />
+        <span className="font-urban text-xl font-bold">
+          {siteConfig.name}
+        </span>
+      </Link>
+      <NavigationMenu>
+      <NavigationMenuList>
+        {/* inicio */}
+        <NavigationMenuItem>
+          <Link href="/" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Inicio
+            </NavigationMenuLink>
           </Link>
+        </NavigationMenuItem>
+        {/* dropdown propiedades */}
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Propiedades</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[200px]">
+              {
+                propiedades != undefined ? 
+                  propiedades.map((p, i) => { return (
+                  <ListItem href={`/propiedades/${p.id}`} title={p.title} key={i} ></ListItem>
+                )})
+                :
+                <ListItem href="/" title="No se encontró ninguna propiedad" ></ListItem>
+              }
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        {/* contacto */}
+        <NavigationMenuItem>
+          <Link href="/contacto" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Contacto
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
 
-          {links && links.length > 0 ? (
-            <nav className="hidden gap-6 md:flex">
-              {links.map((item, index) => (
-                <Link
-                  key={index}
-                  href={item.disabled ? "#" : item.href}
-                  prefetch={true}
-                  className={cn(
-                    "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
-                    item.href.startsWith(`/${selectedLayout}`)
-                      ? "text-foreground"
-                      : "text-foreground/60",
-                    item.disabled && "cursor-not-allowed opacity-80",
-                  )}
-                >
-                  {item.title}
-                </Link>
-              ))}
-            </nav>
-          ) : null}
-        </div>
-
-        <div className="flex items-center space-x-3">
-          {/* right header for docs */}
-          {documentation ? (
-            <div className="hidden flex-1 items-center space-x-4 sm:justify-end lg:flex">
-              <div className="hidden lg:flex lg:grow-0">
-                <DocsSearch />
-              </div>
-              <div className="flex lg:hidden">
-                <Icons.search className="size-6 text-muted-foreground" />
-              </div>
-              <div className="flex space-x-4">
-                <Link
-                  href={siteConfig.links.github}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Icons.gitHub className="size-7" />
-                  <span className="sr-only">GitHub</span>
-                </Link>
-              </div>
-            </div>
-          ) : null}
-
-          {session ? (
-            <Link
-              href={session.user.role === "ADMIN" ? "/admin" : "/dashboard"}
-              className="hidden md:block"
-            >
-              <Button
-                className="gap-2 px-5"
-                variant="default"
-                size="sm"
-                rounded="full"
-              >
-                <span>Dashboard</span>
-              </Button>
-            </Link>
-          ) : status === "unauthenticated" ? (
+      </NavigationMenuList>
+      </NavigationMenu>
+      {/* boton para iniciar sesion y entrar al panel de admin */}
+      {session ?   
+      <UserAccountNav />
+      :
+        status === "unauthenticated" ? (
             <Button
               className="hidden gap-2 px-5 md:flex"
               variant="default"
@@ -122,14 +104,41 @@ export function NavBar({ scroll = false }: NavBarProps) {
               rounded="full"
               onClick={() => setShowSignInModal(true)}
             >
-              <span>Sign In</span>
+              <span>Iniciar Sesión</span>
               <Icons.arrowRight className="size-4" />
             </Button>
           ) : (
             <Skeleton className="hidden h-9 w-28 rounded-full lg:flex" />
-          )}
-        </div>
-      </MaxWidthWrapper>
-    </header>
-  );
+      )}
+      {/* boton para cambiar el tema de la pagina */}
+      <ModeToggle />
+    </MaxWidthWrapper>
+  </header>
+  )
 }
+ 
+const ListItem = forwardRef<
+  ElementRef<"a">,
+  ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"

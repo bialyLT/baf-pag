@@ -1,18 +1,16 @@
 import { MarketingConfig } from "types"
 
+// const propiedades = getAllPropiedadesNavbar()
+
 export const marketingConfig: MarketingConfig = {
   mainNav: [
     {
-      title: "Pricing",
-      href: "/pricing",
+      title: "Propiedades",
+      href: "/#propiedades",
     },
     {
-      title: "Blog",
-      href: "/blog",
-    },
-    {
-      title: "Documentation",
-      href: "/docs",
-    },
-  ],
+      title: "Contacto",
+      href: "/contacto",
+    }
+  ]
 }

@@ -28,10 +28,9 @@ function SignInModal({
           <a href={siteConfig.url}>
             <Icons.logo className="size-10" />
           </a>
-          <h3 className="font-urban text-2xl font-bold">Sign In</h3>
+          <h3 className="font-urban text-2xl font-bold">Iniciar Sesión</h3>
           <p className="text-sm text-gray-500">
-            This is strictly for demo purposes - only your email and profile
-            picture will be stored.
+            Esto es para iniciar sesión como administrador, si no eres un administrador no se te permitirá iniciar sesión.
           </p>
         </div>
 
@@ -53,7 +52,7 @@ function SignInModal({
             ) : (
               <Icons.google className="mr-2 size-4" />
             )}{" "}
-            Sign In with Google
+            Iniciar sesión con Google
           </Button>
         </div>
       </div>

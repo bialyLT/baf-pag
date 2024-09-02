@@ -19,7 +19,7 @@ export async function updateUserName(userId: string, data: FormData) {
 
     const { name } = userNameSchema.parse(data);
 
-    // Update the user name.
+    // Actualizar el nombre de usuario.
     await prisma.user.update({
       where: {
         id: userId,
@@ -29,7 +29,7 @@ export async function updateUserName(userId: string, data: FormData) {
       },
     })
 
-    revalidatePath('/dashboard/settings');
+    revalidatePath('/panel-de-control/configuraciones');
     return { status: "success" };
   } catch (error) {
     // console.log(error)

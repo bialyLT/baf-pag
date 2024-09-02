@@ -8,8 +8,8 @@ import { UserAuthForm } from "@/components/forms/user-auth-form";
 import { Icons } from "@/components/shared/icons";
 
 export const metadata: Metadata = {
-  title: "Login",
-  description: "Login to your account",
+  title: "Iniciar sesión",
+  description: "Inicia sesión con tu cuenta de Google",
 };
 
 export default function LoginPage() {
@@ -24,17 +24,17 @@ export default function LoginPage() {
       >
         <>
           <Icons.chevronLeft className="mr-2 size-4" />
-          Back
+          Volver al inicio
         </>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
-          <Icons.logo className="mx-auto size-6" />
+          <Icons.logo className="mx-auto size-20" />
           <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
+            Bienvenido de vuelta
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email to sign in to your account
+            Inicia sesión con tu cuenta de Google para continuar
           </p>
         </div>
         <Suspense>
@@ -45,7 +45,7 @@ export default function LoginPage() {
             href="/register"
             className="hover:text-brand underline underline-offset-4"
           >
-            Don&apos;t have an account? Sign Up
+            ¿No tienes una cuenta? Regístrate y espera la validación.
           </Link>
         </p>
       </div>

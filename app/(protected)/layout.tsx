@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { sidebarLinks } from "@/config/dashboard";
 import { getCurrentUser } from "@/lib/session";
-import { SearchCommand } from "@/components/dashboard/search-command";
+import { SearchCommand } from "@/components/panel-de-control/search-command";
 import {
   DashboardSidebar,
   MobileSheetSidebar,
@@ -19,6 +19,7 @@ export default async function Dashboard({ children }: ProtectedLayoutProps) {
   const user = await getCurrentUser();
 
   if (!user) redirect("/login");
+  if (user.role !== "ADMIN") redirect('/');
 
   const filteredLinks = sidebarLinks.map((section) => ({
     ...section,
