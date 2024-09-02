@@ -25,8 +25,7 @@ export default async function DashboardPage() {
       />
       {publicaciones.length
       ?
-      <PropiedadesTable propiedades={publicaciones}  />
-      
+        <PropiedadesTable propiedades={publicaciones}  />
       : <EmptyPlaceholder>
         <EmptyPlaceholder.Icon name="post" />
         <EmptyPlaceholder.Title>No hay publicaciones creadas</EmptyPlaceholder.Title>

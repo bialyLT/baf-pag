@@ -54,13 +54,13 @@ export function UserRoleForm({ user }: UserNameFormProps) {
       const { status } = await updateUserRoleWithId(data);
 
       if (status !== "success") {
-        toast.error("Something went wrong.", {
-          description: "Your role was not updated. Please try again.",
+        toast.error("Algo anduvo mal.", {
+          description: "Tu rol no ha sido actualizado, por favor, inténtalo de vuelta.",
         });
       } else {
         await update();
         setUpdated(false);
-        toast.success("Your role has been updated.");
+        toast.success("Tu rol ha sido actualizado.");
       }
     });
   };
@@ -69,8 +69,8 @@ export function UserRoleForm({ user }: UserNameFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <SectionColumns
-          title="Your Role"
-          description="Select the role what you want for test the app."
+          title="Rol actual"
+          description="Seleccione el rol que desees tener en la aplicación."
         >
           <div className="flex w-full items-center gap-2">
             <FormField
@@ -78,7 +78,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
               name="role"
               render={({ field }) => (
                 <FormItem className="w-full space-y-0">
-                  <FormLabel className="sr-only">Role</FormLabel>
+                  <FormLabel className="sr-only">Rol</FormLabel>
                   <Select
                     // TODO:(FIX) Option value not update. Use useState for the moment
                     onValueChange={(value: UserRole) => {
@@ -91,7 +91,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a role" />
+                        <SelectValue placeholder="Seleccione un rol" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -116,15 +116,15 @@ export function UserRoleForm({ user }: UserNameFormProps) {
                 <Icons.spinner className="size-4 animate-spin" />
               ) : (
                 <p>
-                  Save
-                  <span className="hidden sm:inline-flex">&nbsp;Changes</span>
+                  Guardar
+                  <span className="hidden sm:inline-flex">&nbsp;cambios</span>
                 </p>
               )}
             </Button>
           </div>
           <div className="flex flex-col justify-between p-1">
             <p className="text-[13px] text-muted-foreground">
-              Remove this field on real production
+              Elimina este campo en el entorno de produccion
             </p>
           </div>
         </SectionColumns>
