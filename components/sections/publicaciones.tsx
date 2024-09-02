@@ -7,11 +7,11 @@ import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 export default function Publicaciones({propiedades}) {
 
   return (
-    <section>
+    <section id="propiedades">
       <div className="pb-6 pt-28">
         <MaxWidthWrapper>
           <HeaderSection
-            label="Publicaciones"
+            label="Propiedades"
             title="Descubre todas las propiedades con las que contamos."
             subtitle="Confía en nuestra experiencia y dedicación para ayudarte a encontrar la propiedad ideal."
           />

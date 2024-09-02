@@ -9,6 +9,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { Textarea } from "../ui/textarea";
 
 export function PropiedadCrearForm({propiedad}) {
   const [files, setFiles] = useState<File[]>([]);
@@ -153,7 +154,11 @@ export function PropiedadCrearForm({propiedad}) {
             <FormItem>
               <FormLabel>Descripción</FormLabel>
               <FormControl>
-                <Input placeholder="Descripción..." {...field} />
+              <Textarea
+                  placeholder="Escribe una descripción"
+                  className="resize-none"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Ingresa una descripción detallada de la propiedad.</FormDescription>
               <FormMessage />
