@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider     = "postgresql"
-  url          = env("DATABASE_URL")
+  url          = "postgresql://bafinmobiliaria_owner:fPMDXJt5wal7@ep-restless-violet-a51zvpct-pooler.us-east-2.aws.neon.tech/bafinmobiliaria?sslmode=require"
 }
 
 enum UserRole {
@@ -78,3 +78,18 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map(name: "verification_tokens")
 }
+
+model propiedad {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  linkFacebook String
+  imagenes     String[]
+  estaVendida  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map(name: "propiedad")
+}
+
+

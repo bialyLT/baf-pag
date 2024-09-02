@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  ArrowDown,
   ArrowUpRight,
   BookOpen,
   Check,
@@ -31,7 +32,9 @@ import {
   Trash,
   User,
   X,
+  Facebook 
 } from "lucide-react";
+import NextImage from "next/image";
 
 export type Icon = LucideIcon;
 
@@ -39,6 +42,7 @@ export const Icons = {
   add: Plus,
   arrowRight: ArrowRight,
   arrowUpRight: ArrowUpRight,
+  arrowDown: ArrowDown,
   billing: CreditCard,
   bookOpen: BookOpen,
   chevronLeft: ChevronLeft,
@@ -103,7 +107,6 @@ export const Icons = {
   home: Home,
   laptop: Laptop,
   lineChart: LineChart,
-  logo: Puzzle,
   media: Image,
   messages: MessagesSquare,
   moon: Moon,
@@ -134,4 +137,13 @@ export const Icons = {
   ),
   user: User,
   warning: AlertTriangle,
+  facebook: Facebook,
+  logo: ({ ...props }: LucideProps) => (
+    <NextImage
+      src="/icon-baf.svg" // Reemplaza con la ruta correcta de tu imagen en la carpeta `public`
+      alt="Logo"
+      width={props.width || 32} // Ajusta el tamaño según lo necesario
+      height={props.height || 32}
+      {...props}
+    />)
 };

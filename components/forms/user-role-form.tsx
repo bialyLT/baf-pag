@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SectionColumns } from "@/components/dashboard/section-columns";
+import { SectionColumns } from "@/components/panel-de-control/section-columns";
 import { Icons } from "@/components/shared/icons";
 
 interface UserNameFormProps {

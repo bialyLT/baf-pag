@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { LogOut, Menu, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
@@ -14,8 +14,13 @@ import { DocsSidebarNav } from "@/components/docs/sidebar-nav";
 import { Icons } from "@/components/shared/icons";
 
 import { ModeToggle } from "./mode-toggle";
+import { PropiedadesNavbar } from "@/types";
 
-export function NavMobile() {
+interface NavbarProps {
+  propiedades: PropiedadesNavbar[];
+}
+
+export function NavMobile({ propiedades }) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const selectedLayout = useSelectedLayoutSegment();
@@ -61,11 +66,11 @@ export function NavMobile() {
       >
         <ul className="grid divide-y divide-muted">
           {links && links.length > 0 && links.map(({ title, href }) => (
-            <li key={href} className="py-3">
+            <li key={href} className="p-2 hover:bg-muted rounded-lg text-foreground">
               <Link
                 href={href}
                 onClick={() => setOpen(false)}
-                className="flex w-full font-medium capitalize"
+                className="flex w-full text-sm"
               >
                 {title}
               </Link>
@@ -75,57 +80,51 @@ export function NavMobile() {
           {session ? (
             <>
               {session.user.role === "ADMIN" ? (
-                <li className="py-3">
-                  <Link
-                    href="/admin"
-                    onClick={() => setOpen(false)}
-                    className="flex w-full font-medium capitalize"
-                  >
-                    Admin
-                  </Link>
-                </li>
+                <>
+                  <li className="rounded-lg text-foreground hover:bg-muted p-2">
+                    <Link
+                      href="/panel-de-control"
+                      onClick={() => setOpen(false)}
+                    >
+                      <p className="text-sm">Panel de control</p>
+                    </Link>
+                  </li>
+                </>
               ) : null}
-
-              <li className="py-3">
-                <Link
-                  href="/dashboard"
-                  onClick={() => setOpen(false)}
-                  className="flex w-full font-medium capitalize"
-                >
-                  Dashboard
-                </Link>
-              </li>
+                  <li
+                    className="rounded-lg text-foreground hover:bg-muted p-2"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      signOut({
+                        callbackUrl: `${window.location.origin}/`,
+                      });
+                    }}
+                  >
+                    <p className="text-sm pointer">Cerrar sesión</p>
+                  </li>
             </>
           ) : (
             <>
-              <li className="py-3">
+              <li className="rounded-lg text-foreground hover:bg-muted p-2">
                 <Link
                   href="/login"
                   onClick={() => setOpen(false)}
-                  className="flex w-full font-medium capitalize"
                 >
-                  Login
+                  <p className="text-sm">Iniciar sesión</p>
                 </Link>
               </li>
 
-              <li className="py-3">
+              <li className="rounded-lg text-foreground hover:bg-muted p-2">
                 <Link
                   href="/register"
                   onClick={() => setOpen(false)}
-                  className="flex w-full font-medium capitalize"
                 >
-                  Sign up
+                  <p className="text-sm">Registrarse</p>
                 </Link>
               </li>
             </>
           )}
         </ul>
-
-        {documentation ? (
-          <div className="mt-8 block md:hidden">
-            <DocsSidebarNav setOpen={setOpen} />
-          </div>
-        ) : null}
 
         <div className="mt-5 flex items-center justify-end space-x-4">
           <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">

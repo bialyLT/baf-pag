@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import "server-only";
-
+import 'server-only'
 declare global {
   // eslint-disable-next-line no-var
   var cachedPrisma: PrismaClient
