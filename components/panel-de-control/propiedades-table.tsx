@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Checkbox } from "../ui/checkbox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { PropiedadCrearModal } from "../modals/propiedad-crear-modal";
@@ -39,9 +39,7 @@ interface PropiedadesTableProps {
     
 }
 
-
-
-export function PropiedadesTable({ propiedades, onRowSelectionChange  }: PropiedadesTableProps) {
+export function PropiedadesTable({ propiedades  }: PropiedadesTableProps) {
     const [rowSelection, setRowSelection] = useState({})
     
     const columns: ColumnDef<Propiedad>[] = [
@@ -71,16 +69,16 @@ export function PropiedadesTable({ propiedades, onRowSelectionChange  }: Propied
           accessorKey: 'title',
           header: 'Título',
           cell: ({ row }) => {
-            const title = row.getValue("title")
-            return <div className="text-left font-medium">{truncate(title, 20)}</div>
+            const title: string = row.getValue("title")
+            return <div className="text-left font-medium">{truncate(title.toString(), 20)}</div>
           },
         },
         {
           accessorKey: 'description',
           header: 'Descripción',
           cell: ({ row }) => {
-            const desc = row.getValue("description")
-            return <div className="text-left font-medium">{truncate(desc, 20)}</div>
+            const desc: string = row.getValue("description")
+            return <div className="text-left font-medium">{truncate(desc.toString(), 20)}</div>
           },
         },
         {

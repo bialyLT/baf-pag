@@ -56,7 +56,7 @@ export default async function PagePage({
 
   return (
     <>
-      <NavMobile propiedades={propiedades}/>
+      <NavMobile />
       <Navbar propiedades={propiedades}/>
       <article className="container max-w-6xl py-6 lg:py-12 text-justify">
         <div className="space-y-4 flex flex-col items-center">

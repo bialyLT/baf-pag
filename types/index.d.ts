@@ -46,3 +46,12 @@ export type InfoList = {
   title: string;
   description: string;
 };
+
+interface Propiedad {
+  id: string;
+  title: string;
+  description: string;
+  linkFacebook: string;
+  imagenes: string[];
+  estaVendida: boolean;
+}

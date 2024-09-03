@@ -10,6 +10,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
+import { Checkbox } from "../ui/checkbox";
 
 export function PropiedadCrearForm({propiedad}) {
   const [files, setFiles] = useState<File[]>([]);
@@ -35,7 +36,7 @@ export function PropiedadCrearForm({propiedad}) {
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("linkFacebook", data.linkFacebook || "");
-      formData.append("estaVendida", data.estaVendida);
+      formData.append("estaVendida", data.estaVendida.toString());
       
       if (!propiedad) {        
         try {
@@ -211,7 +212,14 @@ export function PropiedadCrearForm({propiedad}) {
             <FormItem>
               <FormLabel>¿Está vendida?</FormLabel>
               <FormControl>
-                <Input type="checkbox" {...field} />
+                <input
+                  type="checkbox"
+                  name={field.name}
+                  checked={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                />
               </FormControl>
               <FormDescription>Indica si la propiedad está vendida.</FormDescription>
               <FormMessage />
