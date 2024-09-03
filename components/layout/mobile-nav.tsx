@@ -3,28 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { LogOut, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { DocsSidebarNav } from "@/components/docs/sidebar-nav";
 import { Icons } from "@/components/shared/icons";
 
 import { ModeToggle } from "./mode-toggle";
-import { PropiedadesNavbar } from "@/types";
-
-interface NavbarProps {
-  propiedades: PropiedadesNavbar[];
-}
-
-export function NavMobile({ propiedades }) {
+export function NavMobile() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const selectedLayout = useSelectedLayoutSegment();
-  const documentation = selectedLayout === "docs";
 
   const configMap = {
     docs: docsConfig.mainNav,

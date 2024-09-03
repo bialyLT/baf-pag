@@ -14,7 +14,7 @@ export default async function MarketingLayout({ children }: MarketingLayoutProps
 
   return (
     <>
-    <NavMobile propiedades={propiedades}/>
+    <NavMobile />
       <Navbar scroll={true} propiedades={propiedades} />
         <MaxWidthWrapper>
       <main className="flex-1">{children}</main>

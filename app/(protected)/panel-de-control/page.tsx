@@ -7,11 +7,13 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { PropiedadCrearModal } from "@/components/modals/propiedad-crear-modal";
 import { getAllPropiedades } from "@/lib/propiedades";
 import { PropiedadesTable } from "@/components/panel-de-control/propiedades-table";
+import { Propiedad } from "@/types";
 
 export const metadata = constructMetadata({
   title: "Panel de control – BAF",
   description: "Panel de control de baf bienesraices",
 });
+
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -25,7 +27,9 @@ export default async function DashboardPage() {
       />
       {publicaciones.length
       ?
-        <PropiedadesTable propiedades={publicaciones}  />
+        <PropiedadesTable propiedades={publicaciones as unknown as Propiedad[]} onRowSelectionChange={function (selectedRows: Record<string, boolean>): void {
+          throw new Error("Function not implemented.");
+        } }  />
       : <EmptyPlaceholder>
         <EmptyPlaceholder.Icon name="post" />
         <EmptyPlaceholder.Title>No hay publicaciones creadas</EmptyPlaceholder.Title>
@@ -36,7 +40,7 @@ export default async function DashboardPage() {
             <DialogTrigger asChild>
               <Button>Añadir publicación</Button>
             </DialogTrigger>
-            <PropiedadCrearModal />
+            <PropiedadCrearModal esAlta={undefined} propiedad={undefined} />
           </Dialog>
       </EmptyPlaceholder>}
     </>

@@ -25,7 +25,6 @@ import {
   MoreVertical,
   Package,
   Plus,
-  Puzzle,
   Search,
   Settings,
   SunMedium,
@@ -35,6 +34,7 @@ import {
   Facebook 
 } from "lucide-react";
 import NextImage from "next/image";
+import React from "react";
 
 export type Icon = LucideIcon;
 
@@ -138,13 +138,14 @@ export const Icons = {
   user: User,
   warning: AlertTriangle,
   facebook: Facebook,
-  logo: ({ ...props }: LucideProps) => (
+  logo: ({ width = 32, height = 32, ...props }) => (
     <NextImage
-      src="/icon-baf.svg" // Reemplaza con la ruta correcta de tu imagen en la carpeta `public`
-      alt="Logo"
-      className="dark:bg-gray-300 rounded"
-      width={props.width || 32} // Ajusta el tamaño según lo necesario
-      height={props.height || 32}
-      {...props}
-    />)
+    src="/icon-baf.svg"
+    alt="Logo"
+    className="dark:bg-gray-300 rounded"
+    width={typeof width === 'string' ? parseInt(width, 10) : width} // Convierte string a número si es necesario
+    height={typeof height === 'string' ? parseInt(height, 10) : height} // Convierte string a número si es necesario
+    {...props}
+  />
+  )
 };
