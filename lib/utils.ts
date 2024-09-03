@@ -13,8 +13,7 @@ export function cn(...inputs: ClassValue[]) {
 export function constructMetadata({
   title = siteConfig.name,
   description = siteConfig.description,
-  image = siteConfig.ogImage,
-  icons = "/favicon.ico",
+  icons = "/icon-baf.ico",
   noIndex = false,
 }: {
   title?: string;
@@ -39,10 +38,10 @@ export function constructMetadata({
     ],
     authors: [
       {
-        name: "mickasmt",
+        name: "Liam Bialy",
       },
     ],
-    creator: "mickasmt",
+    creator: "Liam Bialy",
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -50,13 +49,6 @@ export function constructMetadata({
       title,
       description,
       siteName: title,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-      creator: "@miickasmt",
     },
     icons,
     metadataBase: new URL(siteConfig.url),

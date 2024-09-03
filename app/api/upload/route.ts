@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
+import { writeFile, mkdir, readdir, unlink } from "fs/promises";
 import path from "path";
 import { normalizeTitle } from "@/lib/utils";
 
@@ -10,11 +10,17 @@ export async function POST(req: Request) {
     const fileUploadPromises: Promise<void>[] = [];
 
     const propiedadTitle = normalizeTitle(data.getAll('id')[0] as string)
-    console.log(propiedadTitle);
 
     // Crear la carpeta con el ID de la propiedad si no existe
     const propertyFolderPath = path.join(process.cwd(), 'public/_static/images/propiedades', propiedadTitle);
     await mkdir(propertyFolderPath, { recursive: true });
+
+    // Eliminar archivos existentes en el directorio
+    const existingFiles = await readdir(propertyFolderPath);
+    const deletePromises = existingFiles.map(file =>
+      unlink(path.join(propertyFolderPath, file))
+    );
+    await Promise.all(deletePromises);
 
     data.forEach( async f => {
       if (!(f instanceof File)) {

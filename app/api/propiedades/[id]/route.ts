@@ -1,12 +1,15 @@
 import { prisma } from "@/lib/db";
+import { normalizeTitle } from "@/lib/utils";
+import { rm } from "fs/promises";
 import { NextResponse } from "next/server";
+import path from "path";
 
 export async function DELETE(req: Request) {
     try {
         // Extraer el ID de la URL
         const url = new URL(req.url);
         const id = Number(url.pathname.split('/').pop());
-        
+        const propiedadTitle = normalizeTitle(url.searchParams.get('title') as string);
         if (!id) {
             return new NextResponse('ID no proporcionado', { status: 400 });
         }
@@ -16,7 +19,13 @@ export async function DELETE(req: Request) {
                 id: id,
             },
         });
-        
+
+        // Eliminar las fotos de la propiedad
+            // Crear la carpeta con el ID de la propiedad si no existe
+        const propertyFolderPath = path.join(process.cwd(), 'public/_static/images/propiedades', propiedadTitle);
+            // Eliminar la carpeta existente y su contenido
+        await rm(propertyFolderPath, { recursive: true, force: true });
+
         return new NextResponse(JSON.stringify({ message: "Publicación eliminada exitosamente!" }), { status: 200 });
     } catch (error) {
         console.error(error);
@@ -37,15 +46,19 @@ export async function PATCH(req: Request) {
         }
 
         // Parsear el cuerpo de la solicitud
-        const title = formData.get("title") as string;
-        const description = formData.get("description") as string;
-        const linkFacebook = formData.get("linkFacebook") as string;
-        const imagenes = formData.getAll("imagenes") as string[];
-        const estaVendida = formData.get("estaVendida") === "true";
+        const title = formData.getAll("title")[0] as string;
+        const description = formData.getAll("description")[0] as string;
+        const linkFacebook = formData.getAll("linkFacebook")[0] as string;
+        const imagenes: string[] = formData.getAll('imagenes') as string[];
+        const estaVendida = formData.getAll("estaVendida")[0] === "true";
 
     // Verifica que los datos necesarios estén presentes
-    if (!title || !description || !linkFacebook || !imagenes) {
+    if (!title || !description || !linkFacebook) {
       return NextResponse.json({ message: "Faltan datos necesarios" }, { status: 400 });
+    }
+
+    if (imagenes.length == 0) {
+        return NextResponse.json({ message: "Debes ingresar una imagen como mínimo"}, { status: 401 });
     }
 
         // Actualizar la propiedad por ID
