@@ -50,7 +50,7 @@ export function Navbar({ scroll = false, propiedades }: NavbarProps) {
     >
       {/* logo */}
       <Link href="/" className="flex items-center space-x-1.5">
-        <Icons.logo />
+      <Icons.logo />
         <span className="font-urban text-xl font-bold">
           {siteConfig.name}
         </span>

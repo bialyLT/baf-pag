@@ -37,7 +37,6 @@ export function PropiedadCrearForm({propiedad}) {
       formData.append("linkFacebook", data.linkFacebook || "");
       formData.append("estaVendida", data.estaVendida);
       
-  
       if (!propiedad) {        
         try {
           // Enviar datos del formulario
@@ -68,8 +67,10 @@ export function PropiedadCrearForm({propiedad}) {
           });
           
           if (!uploadRes.ok) {
-            throw new Error("Algo salió mal al subir los archivos.");
+            throw new Error("Algo salió mal al subir los archivos al crear la publicación.");
           }
+
+          if (uploadRes.status == 401) throw new Error("Debes seleccionar al menos una imagen para subir");
           
           // Manejo de la respuesta de la subida de archivos
           const uploadResult = await uploadRes.json();
@@ -88,6 +89,8 @@ export function PropiedadCrearForm({propiedad}) {
             method: "PATCH",
             body: formData,
           });
+
+          if (res.status == 401) throw new Error("Debes ingresar al menos una foto");
           
           if (!res.ok) {
             throw new Error("Algo salió mal al editar la propiedad.");
@@ -95,7 +98,7 @@ export function PropiedadCrearForm({propiedad}) {
           
           // Manejo de la respuesta de la edicion de la propiedad
           const result = await res.json();
-          console.log("Propiedad creada:", result);
+          console.log("Propiedad editada:", result);
           
           // Solo si hay archivos seleccionados
           if (files.length > 0) {
@@ -104,6 +107,7 @@ export function PropiedadCrearForm({propiedad}) {
             files.forEach(file => {
               formUploadImages.append("file", file);
             });
+            formUploadImages.append("id", data.title)
             
             // Enviar archivos
             const uploadRes = await fetch('/api/upload', {
@@ -112,7 +116,7 @@ export function PropiedadCrearForm({propiedad}) {
             });
             
             if (!uploadRes.ok) {
-              throw new Error("Algo salió mal al subir los archivos.");
+              throw new Error("Algo salió mal al subir los archivos al modificar la publicación.");
             }
             
             // Manejo de la respuesta de la subida de archivos
@@ -214,7 +218,7 @@ export function PropiedadCrearForm({propiedad}) {
             </FormItem>
           )}
         />
-        <Button type="submit">Crear</Button>
+        <Button type="submit">{propiedad ? "Modificar" : "Crear"}</Button>
       </form>
     </Form>
   )

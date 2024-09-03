@@ -22,6 +22,7 @@ import { Dialog, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { PropiedadCrearModal } from "../modals/propiedad-crear-modal";
 import { toast } from "sonner";
+import { truncate } from "@/lib/utils";
  
 interface Propiedad {
     id: string;
@@ -69,10 +70,18 @@ export function PropiedadesTable({ propiedades, onRowSelectionChange  }: Propied
         {
           accessorKey: 'title',
           header: 'Título',
+          cell: ({ row }) => {
+            const title = row.getValue("title")
+            return <div className="text-left font-medium">{truncate(title, 20)}</div>
+          },
         },
         {
           accessorKey: 'description',
           header: 'Descripción',
+          cell: ({ row }) => {
+            const desc = row.getValue("description")
+            return <div className="text-left font-medium">{truncate(desc, 20)}</div>
+          },
         },
         {
           accessorKey: 'linkFacebook',
@@ -100,11 +109,11 @@ export function PropiedadesTable({ propiedades, onRowSelectionChange  }: Propied
         if (table.getFilteredSelectedRowModel().rows.length > 0) {
             table.getFilteredSelectedRowModel().rows.forEach(async r => {                
                 try {
-                    const response = await fetch(`/api/propiedades/${r.original.id}`, {
+                    const response = await fetch(`/api/propiedades/${r.original.id}?title=${encodeURIComponent(r.original.title)}`, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
-                        },
+                        }
                     });
                     if (!response.ok) {
                         throw new Error('Error al eliminar la publicación');

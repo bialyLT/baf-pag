@@ -6,6 +6,7 @@ import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import { Icons } from "../shared/icons";
 import { siteConfig } from "@/config/site";
+import MaxWidthWrapper from "../shared/max-width-wrapper";
 
 export default async function HeroLanding() {
   const image = headerImage;
@@ -21,7 +22,7 @@ export default async function HeroLanding() {
                   priority
                   placeholder="blur"
                   blurDataURL={await getBlurDataURL(image.imgInfo.url!)}
-                  className="min-w-fit rounded-lg shadow-2xl hidden md:block"
+                  className="min-w-fit rounded-lg shadow-2xl hidden lg:block"
                 />
               </div>
               <div>
@@ -29,17 +30,10 @@ export default async function HeroLanding() {
                   Bienvenido a BAF Bienes Raices!
                 </h1>
                 <p
-                  className="max-w-2xl text-balance leading-normal text-muted-foreground sm:text-xl sm:leading-8"
-                  style={{ animationDelay: "0.35s", animationFillMode: "forwards" }}
+                  className="max-w-2xl text-balance leading-normal text-muted-foreground sm:text-xl sm:leading-8 mb-10"
                   >
                   Descubra el hogar de sus sueños con nosotros. Nuestra pasión es encontrar la propiedad perfecta que se adapte a sus necesidades y estilo de vida.
                 </p>
-              </div>
-          </div>
-                <div
-                  className="flex justify-center space-x-2 md:space-x-4"
-                  style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
-                >
                   <Link
                     href="#propiedades"
                     prefetch={true}
@@ -69,7 +63,8 @@ export default async function HeroLanding() {
                       Pagina de Facebook
                     </p>
                   </Link>
-                </div>
+              </div>
+          </div>
     </section>
   );
 }

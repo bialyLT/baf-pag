@@ -142,6 +142,7 @@ export const Icons = {
     <NextImage
       src="/icon-baf.svg" // Reemplaza con la ruta correcta de tu imagen en la carpeta `public`
       alt="Logo"
+      className="dark:bg-gray-300 rounded"
       width={props.width || 32} // Ajusta el tamaño según lo necesario
       height={props.height || 32}
       {...props}

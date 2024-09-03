@@ -1,14 +1,15 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeaderSection } from "@/components/shared/header-section";
-import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
+import Image from "next/image";
+import { normalizeTitle, truncate } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 export default function Publicaciones({propiedades}) {
 
   return (
     <section id="propiedades">
-      <div className="pb-6 pt-28">
+      <div className="pb-6">
         <MaxWidthWrapper>
           <HeaderSection
             label="Propiedades"
@@ -16,36 +17,39 @@ export default function Publicaciones({propiedades}) {
             subtitle="Confía en nuestra experiencia y dedicación para ayudarte a encontrar la propiedad ideal."
           />
 
-          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-             {propiedades.map((p) => {
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+             {propiedades.map((p, i) => {
               return (
-                <div
-                  className="group text-center relative overflow-hidden rounded-2xl border bg-background p-5 md:p-8"
-                  key={p.title}
-                >
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 aspect-video -translate-y-1/2 rounded-full border bg-gradient-to-b from-purple-500/80 to-white opacity-25 blur-2xl duration-300 group-hover:-translate-y-1/4 dark:from-white dark:to-white dark:opacity-5 dark:group-hover:opacity-10"
-                  />
-                  <div className="relative">
-                    <p className="mt-6 pb-6 text-muted-foreground">
-                      {p.title}
-                    </p>
-                    <div className="-mb-5 flex gap-3 border-t border-muted py-4 md:-mb-7">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        rounded="xl"
-                        className="px-4"
-                      >
-                        <Link href={`/propiedades/${p.id}`} className="flex items-center gap-2">
-                          <span>Ver más</span>
-                          <Icons.arrowUpRight className="size-4" />
-                        </Link>
+                <>
+                <div key={i} className="card bg-base-100 image-full w-90 shadow-xl">
+                  <figure>
+                    <Image
+                      src={`/_static/images/propiedades/${normalizeTitle(p.title)}/${p.imagenes[0]}`}
+                      alt={`image ${i} de la publicacion: ${p.title}`}
+                      width={500}
+                      height={500}
+                      className="min-w-full hover:animate-customPing"
+                      />
+                  </figure>
+                  <div className="card-body">
+                    {p.estaVendida
+                    ? 
+                      <Badge variant="destructive">Vendido</Badge>
+                    :
+                    <Badge variant="success">Disponible</Badge>
+                    }
+                    <h2 className="card-title text-white capitalize">{truncate(p.title, 100)}</h2>
+                    <p className="text-white">{truncate(p.description, 100)}</p>
+                    <div className="card-actions justify-end">
+                      <Button variant={"link"} className="hover:font-bold text-white">      
+                        <a href={`/propiedades/${p.id}`}>
+                        Ver más{'  >'}
+                        </a>
                       </Button>
                     </div>
                   </div>
                 </div>
+              </>
               );
             })}
           </div>

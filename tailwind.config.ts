@@ -67,6 +67,12 @@ const config = {
         geist: ["var(--font-geist)", ...fontFamily.sans],
       },
       keyframes: {
+        customPing: {
+            '75%, 100%': {
+              transform: 'scale(1.1)', // Ajusta la escala según tus necesidades
+              opacity: '80',
+            }
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -137,10 +143,13 @@ const config = {
         // Fade in and out
         "fade-in": "fade-in 0.4s",
         "fade-out": "fade-out 0.4s",
+
+        customPing: 'customPing 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+        
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography"), require('daisyui')],
 } satisfies Config;
 
 export default config;
