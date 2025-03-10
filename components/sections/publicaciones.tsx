@@ -6,7 +6,6 @@ import { normalizeTitle, truncate } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 
 export default function Publicaciones({propiedades}) {
-
   return (
     <section id="propiedades">
       <div className="pb-6">
@@ -34,6 +33,7 @@ export default function Publicaciones({propiedades}) {
                   <div className="card-body">
                     {p.estaVendida
                     ? 
+
                       <Badge variant="destructive">Vendido</Badge>
                     :
                     <Badge variant="success">Disponible</Badge>

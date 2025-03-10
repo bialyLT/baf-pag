@@ -27,9 +27,7 @@ export default async function DashboardPage() {
       />
       {publicaciones.length
       ?
-        <PropiedadesTable propiedades={publicaciones as unknown as Propiedad[]} onRowSelectionChange={function (selectedRows: Record<string, boolean>): void {
-          throw new Error("Function not implemented.");
-        } }  />
+        <PropiedadesTable propiedades={publicaciones as unknown as Propiedad[]} />
       : <EmptyPlaceholder>
         <EmptyPlaceholder.Icon name="post" />
         <EmptyPlaceholder.Title>No hay publicaciones creadas</EmptyPlaceholder.Title>
