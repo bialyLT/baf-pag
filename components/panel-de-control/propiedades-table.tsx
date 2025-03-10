@@ -35,8 +35,6 @@ interface Propiedad {
 
 interface PropiedadesTableProps {
     propiedades: Propiedad[];
-    onRowSelectionChange: (selectedRows: Record<string, boolean>) => void;
-    
 }
 
 export function PropiedadesTable({ propiedades  }: PropiedadesTableProps) {
