@@ -1,4 +1,3 @@
-
 export const revalidate = 10;
 
 import { notFound } from "next/navigation";
@@ -13,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/navbar";
 import { NavMobile } from "@/components/layout/mobile-nav";
 import PropiedadVistaModal from "@/components/modals/propiedad-vista-modal";
+import { Icons } from "@/components/shared/icons"; 
 
 export async function generateStaticParams() {
   const propiedades = await getAllPropiedadesId();
@@ -70,7 +70,15 @@ export default async function PagePage({
           <p className="text-sm text-muted-foreground">{propiedad.description}</p>
         </div>
         <hr className="my-4" />
-        <div className="grid grid-cols-3 gap-5 justify-center justify-items-center items-center">
+        
+        <div className="flex justify-center my-4">
+          <a href={propiedad.linkFacebook} target="_blank" rel="noopener noreferrer" className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <Icons.facebook className="mr-2" /> Compartir en Facebook
+          </a>
+        </div>
+
+        <hr className="my-4" />
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {imagenes}
         </div>
       </article>

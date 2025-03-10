@@ -3,14 +3,14 @@ import Image from "next/image";
 
 export default function PropiedadVistaModal({propiedad, img, index}) {
 return (
-    <div>
-        <label htmlFor={`propiedad-${propiedad.id}-img-${index}`} className="btn">
+    <div className="relative justify-center justify-items-center">
+        <label htmlFor={`propiedad-${propiedad.id}-img-${index}`} className="block cursor-pointer">
             <Image
                 src={`/_static/images/propiedades/${normalizeTitle(propiedad.title)}/${img}`}
                 alt={`${normalizeTitle(propiedad.title)}-${index}`}
                 width={200}
                 height={200}
-                className="min-w-fit rounded-lg shadow-2xl md:block"
+                className="rounded-lg shadow-2xl md:block"
             />
         </label>
         <input type="checkbox" id={`propiedad-${propiedad.id}-img-${index}`} className="modal-toggle" />

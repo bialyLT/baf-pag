@@ -40,7 +40,7 @@ export async function PATCH(req: Request) {
         // Extraer el ID de la URL
         const url = new URL(req.url);
         const id = Number(url.pathname.split('/').pop());
-
+        
         if (!id) {
             return new NextResponse('ID no proporcionado', { status: 400 });
         }
