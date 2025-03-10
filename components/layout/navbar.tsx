@@ -69,7 +69,7 @@ export function Navbar({ scroll = false, propiedades }: NavbarProps) {
         <NavigationMenuItem>
           <NavigationMenuTrigger>Propiedades</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[200px]">
+            <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[200px] max-h-80 overflow-y-auto">
               {
                 propiedades != undefined ? 
                   propiedades.map((p, i) => { return (

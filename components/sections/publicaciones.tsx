@@ -6,6 +6,7 @@ import { normalizeTitle, truncate } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 
 export default function Publicaciones({propiedades}) {
+  const sortedPropiedades = propiedades.sort((a, b) => a.estaVendida - b.estaVendida);
   return (
     <section id="propiedades">
       <div className="pb-6">
@@ -17,7 +18,7 @@ export default function Publicaciones({propiedades}) {
           />
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-             {propiedades.map((p, i) => {
+             {sortedPropiedades.map((p, i) => {
               return (
                 <>
                 <div key={i} className="card bg-base-100 image-full w-90 shadow-xl">
