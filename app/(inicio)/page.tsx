@@ -1,3 +1,5 @@
+
+export const revalidate = 10;
 import Publicaciones from "@/components/sections/publicaciones";
 import HeroLanding from "@/components/sections/hero-landing";
 import { getAllPropiedades } from "@/lib/propiedades";
