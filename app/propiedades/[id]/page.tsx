@@ -1,3 +1,6 @@
+
+export const revalidate = 10;
+
 import { notFound } from "next/navigation";
 
 import "@/styles/mdx.css";
