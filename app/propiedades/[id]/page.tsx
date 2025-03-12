@@ -70,17 +70,16 @@ export default async function PagePage({
           <p className="text-sm text-muted-foreground">{propiedad.description}</p>
         </div>
         <hr className="my-4" />
-        
-        <div className="flex justify-center my-4">
-          <a href={propiedad.linkFacebook} target="_blank" rel="noopener noreferrer" className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            <Icons.facebook className="mr-2" /> Compartir en Facebook
-          </a>
-        </div>
-
-        <hr className="my-4" />
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {imagenes}
         </div>
+        <hr className="my-4" />                
+        <div className="flex justify-center my-4">
+          <a href={propiedad.linkFacebook} target="_blank" rel="noopener noreferrer" className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <Icons.facebook className="mr-2" /> Ver en Facebook
+          </a>
+        </div>
+
       </article>
     </>
   );

@@ -68,7 +68,6 @@ export function NavMobile() {
               </Link>
             </li>
           ))}
-
           {session ? (
             <>
               {session.user.role === "ADMIN" ? (
