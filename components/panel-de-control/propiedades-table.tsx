@@ -193,7 +193,8 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
   return (
     <>
       <div className="rounded-md border">
-        <Table>
+      <div className="rounded-md border min-h-[400px]">
+        <Table className="w-full overflow-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -241,6 +242,32 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
             )}
           </TableBody>
         </Table>
+      </div>
+        <div className="flex items-center justify-between p-4">
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Anterior
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Siguiente
+            </Button>
+          </div>
+          <span className="text-sm">
+            Página{" "}
+            <strong>
+              {table.getState().pagination.pageIndex + 1} de{" "}
+              {table.getPageCount()}
+            </strong>
+          </span>
+        </div>
       </div>
       <div className="flex justify-center gap-5">
         <Dialog>
