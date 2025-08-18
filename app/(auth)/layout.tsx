@@ -11,7 +11,7 @@ export default async function AuthLayout({ children }: AuthLayoutProps) {
   const user = await getCurrentUser();
 
   // Si el usuario está autenticado, redirigir según su rol
-  if (shouldRedirect(user)) {
+  if (user && shouldRedirect(user)) {
     redirect(getRedirectUrl(user));
   }
 

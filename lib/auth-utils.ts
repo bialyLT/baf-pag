@@ -25,9 +25,9 @@ export function getRedirectUrl(user: AuthUser): string {
 
 /**
  * Verifica si el usuario debería ser redirigido
- * @param user - Usuario o null
+ * @param user - Usuario o null/undefined
  * @returns true si debe redirigir
  */
-export function shouldRedirect(user: AuthUser | null): boolean {
+export function shouldRedirect(user: AuthUser | null | undefined): boolean {
   return !!user;
 }

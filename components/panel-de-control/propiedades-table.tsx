@@ -4,7 +4,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -20,9 +19,13 @@ import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 import { PropiedadCrearModal } from "../modals/propiedad-crear-modal";
 import { toast } from "sonner";
 import { truncate } from "@/lib/utils";
+import { CldImage } from 'next-cloudinary';
+import { Icons } from "../shared/icons";
+import { cn } from "@/lib/utils";
 
 interface Propiedad {
   id: string;
@@ -107,13 +110,41 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
       enableHiding: false,
     },
     {
+      accessorKey: "imagenes",
+      header: "Imagen",
+      cell: ({ row }) => {
+        const imagenes: string[] = row.getValue("imagenes");
+        const firstImage = imagenes && imagenes.length > 0 ? imagenes[0] : null;
+        
+        return (
+          <div className="flex items-center justify-center w-20 h-20 p-2">
+            {firstImage ? (
+              <CldImage
+                src={firstImage}
+                alt={`Imagen de ${row.getValue("title")}`}
+                width={80}
+                height={80}
+                className="w-16 h-16 rounded-md object-cover shadow-sm"
+              />
+            ) : (
+              <div className="w-16 h-16 bg-gray-200 rounded-md flex items-center justify-center">
+                <Icons.home className="w-6 h-6 text-gray-400" />
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "title",
       header: "Título",
       cell: ({ row }) => {
         const title: string = row.getValue("title");
         return (
-          <div className="text-left font-medium">
-            {truncate(title.toString(), 20)}
+          <div className="text-left font-semibold text-lg py-3 px-2 min-w-[200px]">
+            <div className="line-clamp-2">
+              {title}
+            </div>
           </div>
         );
       },
@@ -124,20 +155,53 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
       cell: ({ row }) => {
         const desc: string = row.getValue("description");
         return (
-          <div className="text-left font-medium">
-            {truncate(desc.toString(), 20)}
+          <div className="text-left text-sm text-muted-foreground py-3 px-2 max-w-md">
+            <div className="line-clamp-3">
+              {truncate(desc, 120)}
+            </div>
           </div>
         );
       },
     },
     {
       accessorKey: "linkFacebook",
-      header: "Link de Facebook",
+      header: "Facebook",
+      cell: ({ row }) => {
+        const link: string = row.getValue("linkFacebook");
+        return (
+          <div className="flex items-center justify-center py-3">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => window.open(link, '_blank')}
+              className="p-2 hover:bg-blue-50 rounded-full"
+              title="Ver en Facebook"
+            >
+              <Icons.facebook className="w-5 h-5 text-blue-600" />
+            </Button>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "estaVendida",
-      header: "Vendida",
-      cell: (info) => (info.getValue() ? "Si" : "No"),
+      header: "Estado",
+      cell: ({ row }) => {
+        const estaVendida: boolean = row.getValue("estaVendida");
+        return (
+          <div className="flex items-center justify-center py-3">
+            {estaVendida ? (
+              <Badge variant="destructive" className="font-medium px-3 py-1">
+                Vendida
+              </Badge>
+            ) : (
+              <Badge variant="default" className="font-medium px-3 py-1 bg-green-100 text-green-800 hover:bg-green-200">
+                Disponible
+              </Badge>
+            )}
+          </div>
+        );
+      },
     },
   ];
 
@@ -146,7 +210,6 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
     columns,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
-    getPaginationRowModel: getPaginationRowModel(),
     state: {
       rowSelection,
     },
@@ -192,15 +255,14 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
 
   return (
     <>
-      <div className="rounded-md border">
-      <div className="rounded-md border min-h-[400px]">
-        <Table className="w-full overflow-auto">
+      <div className="w-full rounded-md border">
+        <Table className="w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="h-12">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -219,9 +281,10 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="h-24 border-b"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="p-4 align-top">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -242,32 +305,6 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
             )}
           </TableBody>
         </Table>
-      </div>
-        <div className="flex items-center justify-between p-4">
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Anterior
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Siguiente
-            </Button>
-          </div>
-          <span className="text-sm">
-            Página{" "}
-            <strong>
-              {table.getState().pagination.pageIndex + 1} de{" "}
-              {table.getPageCount()}
-            </strong>
-          </span>
-        </div>
       </div>
       <div className="flex justify-center gap-5">
         <Dialog>
