@@ -6,13 +6,18 @@ export async function POST(req: Request) {
   try {
     const data = await req.formData();
     const propiedadTitle = normalizeTitle(data.getAll('id')[0] as string);
+    const isFirstBatch = data.get('isFirstBatch') === 'true';
 
-    // Eliminar imágenes anteriores de Cloudinary si existen
-    try {
-      await deleteFromCloudinary(propiedadTitle);
-      console.log(`🗑️ Imágenes anteriores eliminadas de Cloudinary para: ${propiedadTitle}`);
-    } catch (error) {
-      console.log('💡 No hay imágenes anteriores para eliminar o error eliminando:', error.message);
+    // Solo eliminar imágenes anteriores en el PRIMER lote
+    if (isFirstBatch) {
+      try {
+        await deleteFromCloudinary(propiedadTitle);
+        console.log(`🗑️ Imágenes anteriores eliminadas de Cloudinary para: ${propiedadTitle}`);
+      } catch (error) {
+        console.log('💡 No hay imágenes anteriores para eliminar o error eliminando:', error.message);
+      }
+    } else {
+      console.log('📦 Lote adicional - no eliminando imágenes anteriores');
     }
 
     // Procesar archivos y subirlos a Cloudinary EN PARALELO

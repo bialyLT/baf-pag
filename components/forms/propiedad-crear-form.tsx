@@ -14,6 +14,8 @@ import { Checkbox } from "../ui/checkbox";
 
 export function PropiedadCrearForm({propiedad}) {
   const [files, setFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string>("");
 
   const form = useForm<z.infer<typeof propiedadSchema>>({
     resolver: zodResolver(propiedadSchema),
@@ -33,37 +35,157 @@ export function PropiedadCrearForm({propiedad}) {
       }
       
       if (!propiedad) {        
+        setIsUploading(true);
         try {
-          // PASO 1: Subir las imágenes a Cloudinary PRIMERO
-          console.log("📤 Subiendo imágenes a Cloudinary...");
-          const formUploadImages = new FormData();
-          files.forEach(file => {
-            formUploadImages.append("file", file);
-          });
-          formUploadImages.append('id', data.title);
+          // PASO 1: Subir las imágenes a Cloudinary en LOTES para evitar límite de 4.5MB
+          setUploadProgress("📤 Analizando imágenes...");
           
-          const uploadRes = await fetch('/api/upload', {
-            method: "POST",
-            body: formUploadImages,
-          });
+          // Calcular el tamaño total para diagnosticar
+          const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+          console.log(`🔍 Total de archivos: ${files.length}`);
+          console.log(`🔍 Tamaño total: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
           
-          if (!uploadRes.ok) {
-            throw new Error("Error al subir las imágenes a Cloudinary");
+          // Función para calcular el tamaño de un lote MEJORADA
+          const getBatchSize = (filesList: File[]) => {
+            let currentBatchSize = 0;
+            let batchFiles: File[] = [];
+            const MAX_BATCH_SIZE = 2.5 * 1024 * 1024; // 2.5MB para más seguridad
+            
+            for (let i = 0; i < filesList.length; i++) {
+              const file = filesList[i];
+              
+              // Si este archivo solo ya excede el límite, lo ponemos solo
+              if (file.size > MAX_BATCH_SIZE) {
+                if (batchFiles.length === 0) {
+                  console.warn(`⚠️ Archivo muy grande: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+                  batchFiles.push(file);
+                }
+                break;
+              }
+              
+              // Si agregar este archivo excede el límite Y ya tenemos archivos
+              if (currentBatchSize + file.size > MAX_BATCH_SIZE && batchFiles.length > 0) {
+                console.log(`📊 Lote completo: ${batchFiles.length} archivos, ${(currentBatchSize / 1024 / 1024).toFixed(2)}MB`);
+                break;
+              }
+              
+              batchFiles.push(file);
+              currentBatchSize += file.size;
+            }
+            
+            return batchFiles;
+          };
+          
+          // Pre-calcular todos los lotes para mostrar progreso real
+          const allBatches: File[][] = [];
+          let remainingForPreview = [...files];
+          while (remainingForPreview.length > 0) {
+            const batch = getBatchSize(remainingForPreview);
+            if (batch.length === 0) break; // Prevenir loop infinito
+            allBatches.push(batch);
+            remainingForPreview = remainingForPreview.slice(batch.length);
           }
           
-          const uploadResult = await uploadRes.json();
-          console.log("✅ Imágenes subidas a Cloudinary:", uploadResult.urls);
+          console.log(`📦 Se crearán ${allBatches.length} lotes`);
+          allBatches.forEach((batch, i) => {
+            const size = batch.reduce((sum, f) => sum + f.size, 0);
+            console.log(`   Lote ${i + 1}: ${batch.length} archivos (${(size / 1024 / 1024).toFixed(2)}MB)`);
+          });
           
-          if (!uploadResult.urls || uploadResult.urls.length === 0) {
-            throw new Error("No se recibieron URLs de Cloudinary");
+          // Procesar lotes uno por uno
+          const allUrls: string[] = [];
+          
+          for (let i = 0; i < allBatches.length; i++) {
+            const batchFiles = allBatches[i];
+            const batchNumber = i + 1;
+            const batchSize = batchFiles.reduce((sum, f) => sum + f.size, 0);
+            
+            setUploadProgress(`📦 Subiendo lote ${batchNumber}/${allBatches.length} (${batchFiles.length} imágenes, ${(batchSize / 1024 / 1024).toFixed(1)}MB)`);
+            
+            try {
+              console.log(`\n� INICIANDO LOTE ${batchNumber}:`);
+              console.log(`   Archivos: ${batchFiles.map(f => f.name).join(', ')}`);
+              
+              const formUploadImages = new FormData();
+              batchFiles.forEach((file, fileIndex) => {
+                formUploadImages.append("file", file);
+                console.log(`   📎 Agregado: ${file.name} (${(file.size / 1024).toFixed(0)}KB)`);
+              });
+              formUploadImages.append('id', data.title);
+              formUploadImages.append('isFirstBatch', i === 0 ? 'true' : 'false'); // Indicar si es el primer lote
+              
+              console.log(`   📤 Enviando lote ${batchNumber} al servidor...`);
+              const uploadRes = await fetch('/api/upload', {
+                method: "POST",
+                body: formUploadImages,
+              });
+              
+              console.log(`   📊 Respuesta del servidor: ${uploadRes.status} ${uploadRes.statusText}`);
+              
+              if (!uploadRes.ok) {
+                const errorText = await uploadRes.text();
+                console.error(`❌ Error en lote ${batchNumber}:`, errorText);
+                throw new Error(`Error en lote ${batchNumber}: ${uploadRes.status} ${uploadRes.statusText}`);
+              }
+              
+              const uploadResult = await uploadRes.json();
+              console.log(`   📊 Resultado lote ${batchNumber}:`, {
+                success: uploadResult.success,
+                uploaded: uploadResult.uploaded,
+                failed: uploadResult.failed,
+                urlsCount: uploadResult.urls?.length || 0
+              });
+              
+              if (!uploadResult.success || !uploadResult.urls || uploadResult.urls.length === 0) {
+                console.error(`❌ Lote ${batchNumber} falló:`, uploadResult);
+                throw new Error(`Lote ${batchNumber} no retornó URLs válidas`);
+              }
+              
+              // Verificar que recibimos las URLs esperadas
+              if (uploadResult.urls.length !== batchFiles.length) {
+                console.warn(`⚠️ Lote ${batchNumber}: esperaba ${batchFiles.length} URLs, recibí ${uploadResult.urls.length}`);
+              }
+              
+              allUrls.push(...uploadResult.urls);
+              console.log(`✅ Lote ${batchNumber} completado. Total URLs acumuladas: ${allUrls.length}`);
+              
+            } catch (batchError) {
+              console.error(`❌ Error crítico en lote ${batchNumber}:`, batchError);
+              throw new Error(`Falló el lote ${batchNumber}: ${batchError.message}`);
+            }
+            
+            // Pausa entre lotes para evitar rate limiting
+            if (i < allBatches.length - 1) {
+              console.log(`   ⏸️ Pausa de 1s antes del siguiente lote...`);
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+          }
+          
+          // VERIFICACIÓN FINAL
+          console.log(`\n🎯 RESUMEN FINAL:`);
+          console.log(`   📊 Total archivos originales: ${files.length}`);
+          console.log(`   📊 Total lotes procesados: ${allBatches.length}`);
+          console.log(`   📊 Total URLs obtenidas: ${allUrls.length}`);
+          console.log(`   🔗 URLs finales:`, allUrls);
+          
+          setUploadProgress(`✅ ${allUrls.length}/${files.length} imágenes subidas. Creando publicación...`);
+          
+          if (allUrls.length === 0) {
+            throw new Error("❌ No se subieron imágenes correctamente - ningún lote retornó URLs");
+          }
+          
+          if (allUrls.length !== files.length) {
+            console.warn(`⚠️ ADVERTENCIA: Se esperaban ${files.length} URLs pero se obtuvieron ${allUrls.length}`);
           }
 
-          // PASO 2: Crear la propiedad con las URLs de Cloudinary
-          console.log("📝 Creando propiedad con URLs de Cloudinary...");
+          // PASO 2: Crear la propiedad con todas las URLs de Cloudinary
+          console.log("\n📝 CREANDO PROPIEDAD:");
+          console.log(`   📊 URLs a guardar: ${allUrls.length}`);
           const formData = new FormData();
           
-          // Usar las URLs de Cloudinary, no los nombres de archivo
-          uploadResult.urls.forEach(url => {
+          // Usar todas las URLs de Cloudinary
+          allUrls.forEach((url, index) => {
+            console.log(`   🔗 URL ${index + 1}: ${url}`);
             formData.append("imagenes", url);
           });
           
@@ -84,13 +206,16 @@ export function PropiedadCrearForm({propiedad}) {
           const result = await res.json();
           console.log("✅ Propiedad creada exitosamente:", result);
           
-          toast.success("Propiedad creada exitosamente!");
+          toast.success(`Propiedad creada exitosamente con ${allUrls.length} imágenes!`);
           form.reset();
           setFiles([]);
           
         } catch (error) {
           console.error('❌ Error:', error);
-          toast.error(error.message);
+          toast.error(error.message || "Error al crear la propiedad");
+        } finally {
+          setIsUploading(false);
+          setUploadProgress("");
         }
       } else {
         // LÓGICA DE EDICIÓN
@@ -261,7 +386,27 @@ export function PropiedadCrearForm({propiedad}) {
             </FormItem>
           )}
         />
-        <Button type="submit">{propiedad ? "Modificar" : "Crear"}</Button>
+        
+        {/* Indicador de progreso */}
+        {isUploading && uploadProgress && (
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
+            <p className="text-sm text-blue-700">{uploadProgress}</p>
+            <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
+              <div className="bg-blue-600 h-2 rounded-full animate-pulse w-3/5"></div>
+            </div>
+          </div>
+        )}
+        
+        <Button 
+          type="submit" 
+          disabled={isUploading}
+          className={isUploading ? "opacity-50 cursor-not-allowed" : ""}
+        >
+          {isUploading 
+            ? (propiedad ? "Modificando..." : "Creando...") 
+            : (propiedad ? "Modificar" : "Crear")
+          }
+        </Button>
       </form>
     </Form>
   )
