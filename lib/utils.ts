@@ -13,6 +13,7 @@ export function cn(...inputs: ClassValue[]) {
 export function constructMetadata({
   title = siteConfig.name,
   description = siteConfig.description,
+  image,
   icons = "/icon-baf.ico",
   noIndex = false,
 }: {
@@ -22,41 +23,106 @@ export function constructMetadata({
   icons?: string;
   noIndex?: boolean;
 } = {}): Metadata {
+  const ogImage = image || `${siteConfig.url}/og-image.jpg`;
+  
   return {
-    title,
+    title: {
+      default: title,
+      template: `%s | ${siteConfig.name}`,
+    },
     description,
     keywords: [
-      "Next.js",
-      "React",
-      "Prisma",
-      "Neon",
-      "Auth.js",
-      "shadcn ui",
-      "Resend",
-      "React Email",
-      "Stripe",
+      // SEO Keywords específicos para bienes raíces
+      "bienes raíces",
+      "propiedades en venta",
+      "casas en venta",
+      "departamentos en venta",
+      "inmobiliaria",
+      "BAF Bienes Raíces",
+      "propiedades Argentina",
+      "real estate",
+      "venta de propiedades",
+      "alquiler de propiedades"
     ],
     authors: [
       {
-        name: "Liam Bialy",
+        name: "BAF Bienes Raíces",
+        url: siteConfig.url,
       },
     ],
-    creator: "Liam Bialy",
+    creator: "BAF Bienes Raíces",
+    publisher: "BAF Bienes Raíces",
+    formatDetection: {
+      telephone: true,
+      address: true,
+      email: true,
+    },
     openGraph: {
       type: "website",
-      locale: "en_US",
+      locale: "es_AR",
+      alternateLocale: ["es_ES", "en_US"],
       url: siteConfig.url,
       title,
       description,
-      siteName: title,
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+          type: "image/jpeg",
+        }
+      ],
     },
-    icons,
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+      creator: "@liambialy",
+      site: "@liambialy",
+    },
+    robots: {
+      index: !noIndex,
+      follow: !noIndex,
+      googleBot: {
+        index: !noIndex,
+        follow: !noIndex,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    icons: {
+      icon: icons,
+      shortcut: icons,
+      apple: icons,
+    },
     metadataBase: new URL(siteConfig.url),
+    alternates: {
+      canonical: siteConfig.url,
+    },
     manifest: `${siteConfig.url}/site.webmanifest`,
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION, // Agregar variable de entorno
+    },
+    category: "Real Estate",
+    classification: "Business",
+    other: {
+      'revisit-after': '7 days',
+      'distribution': 'global',
+      'rating': 'general',
+      'geo.region': 'AR',
+      'geo.placename': 'Argentina',
+    },
     ...(noIndex && {
       robots: {
         index: false,
         follow: false,
+        noarchive: true,
+        nosnippet: true,
+        noimageindex: true,
       },
     }),
   };

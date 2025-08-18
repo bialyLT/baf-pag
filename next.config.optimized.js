@@ -1,53 +1,25 @@
-// const { withContentlayer } = require("next-contentlayer2");
-
-import("./env.mjs");
-
+// next.config.js optimizations for SEO and Performance
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  
   // Performance optimizations
-  compress: true,
-  poweredByHeader: false,
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
   
+  // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "randomuser.me",
-      },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-    ],
-  },
-  
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client"],
-    optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
-    optimizeCss: true,
-  },
-  
-  // Optimizar compilación TypeScript
-  typescript: {
-    tsconfigPath: './tsconfig.json',
   },
 
-  // SEO and Performance headers
+  // Compression and caching
+  compress: true,
+  poweredByHeader: false,
+  
+  // SEO headers
   async headers() {
     return [
       {
@@ -76,11 +48,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400, s-maxage=86400',
-          },
-          {
-            key: 'Content-Type',
-            value: 'application/xml',
+            value: 'public, max-age=86400, s-maxage=86400', // 24 hours
           },
         ],
       },
@@ -89,29 +57,27 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control', 
-            value: 'public, max-age=86400, s-maxage=86400',
-          },
-          {
-            key: 'Content-Type',
-            value: 'text/plain',
+            value: 'public, max-age=86400, s-maxage=86400', // 24 hours
           },
         ],
       },
+      // Static assets caching
       {
         source: '/favicon.ico',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: 'public, max-age=31536000, immutable', // 1 year
           },
         ],
       },
     ]
   },
 
-  // SEO redirects
+  // Redirects for SEO
   async redirects() {
     return [
+      // Redirect old URLs if needed
       {
         source: '/property/:id',
         destination: '/propiedades/:id',
@@ -124,8 +90,6 @@ const nextConfig = {
       },
     ]
   },
-};
+}
 
-// Temporal: deshabilitar contentlayer para mejorar performance
-// module.exports = withContentlayer(nextConfig);
-module.exports = nextConfig;
+module.exports = nextConfig

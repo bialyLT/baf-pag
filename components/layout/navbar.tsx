@@ -69,19 +69,11 @@ export function Navbar({ scroll = false, propiedades }: NavbarProps) {
         </NavigationMenuItem>
         {/* dropdown propiedades */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Propiedades</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[200px] max-h-80 overflow-y-auto">
-              {
-                propiedades != undefined ? 
-                  propiedades.map((p, i) => { return (
-                  <ListItem href={`/propiedades/${p.id}`} title={p.title} key={i} ></ListItem>
-                )})
-                :
-                <ListItem href="/" title="No se encontró ninguna propiedad" ></ListItem>
-              }
-            </ul>
-          </NavigationMenuContent>
+          <Link href="/propiedades" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Propiedades
+            </NavigationMenuLink>
+          </Link>
         </NavigationMenuItem>
         {/* contacto */}
         <NavigationMenuItem>

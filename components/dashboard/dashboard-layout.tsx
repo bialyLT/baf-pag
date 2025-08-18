@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
+import { SiteFooter } from "@/components/layout/site-footer";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 import { SidebarNavItem } from "@/types";
 
@@ -21,6 +22,8 @@ export function DashboardLayout({ children, links }: DashboardLayoutProps) {
             {children}
           </MaxWidthWrapper>
         </main>
+        
+        <SiteFooter />
       </div>
     </div>
   );
