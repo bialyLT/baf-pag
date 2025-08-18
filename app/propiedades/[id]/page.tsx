@@ -73,7 +73,7 @@ export async function generateMetadata({
   const propertyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/propiedades/${propiedad.id}`;
 
   return {
-    title: `${propiedad.title} | BAF Bienes Raíces`,
+    title: propiedad.title, // Usar solo el título de la propiedad, la función generateSEOMetadata agregará el sitio automáticamente
     description: metaDescription,
     
     keywords: Array.from(new Set(propertyKeywords)), // Eliminar duplicados

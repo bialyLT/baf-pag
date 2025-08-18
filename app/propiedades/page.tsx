@@ -37,7 +37,7 @@ export default function PropiedadesPage() {
 
   // Configurar SEO para el lado cliente
   useEffect(() => {
-    document.title = "Propiedades en Venta - BAF Bienes Raíces"
+    document.title = "Propiedades en Venta" // Remover duplicación de BAF
     
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {

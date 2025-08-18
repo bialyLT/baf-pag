@@ -93,7 +93,14 @@ export function generateSEOMetadata({
   tags = [],
   noIndex = false
 }: SEOPageConfig): Metadata {
-  const fullTitle = title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
+  // Evitar duplicación si el título ya contiene "BAF Bienes Raíces" o elementos del sitio
+  const fullTitle = title.toLowerCase().includes('baf bienes raíces') || 
+                   title.toLowerCase().includes('inmobiliaria') ||
+                   title === siteConfig.name ||
+                   title.includes(' - ') ||
+                   title.includes(' | ')
+    ? title 
+    : `${title} - ${siteConfig.name}`;
   const ogImage = image || `${siteConfig.url}/og-image.jpg`;
   
   // Combinar keywords específicas con las generales

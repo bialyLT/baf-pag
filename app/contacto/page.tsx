@@ -15,7 +15,7 @@ export const metadata: Metadata = generateSEOMetadata({
   description: "Contáctanos para encontrar la propiedad perfecta. Estamos disponibles para asesorarte en tu búsqueda inmobiliaria en Posadas, Misiones.",
   keywords: [
     "contacto inmobiliaria",
-    "asesoría inmobiliaria",
+    "asesoría inmobiliaria", 
     "agentes inmobiliarios",
     "consulta propiedades",
     "servicio al cliente"

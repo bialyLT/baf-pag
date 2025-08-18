@@ -28,7 +28,7 @@ export function constructMetadata({
   return {
     title: {
       default: title,
-      template: `%s | ${siteConfig.name}`,
+      template: title === siteConfig.name ? "%s" : `%s | ${siteConfig.name}`,
     },
     description,
     keywords: [

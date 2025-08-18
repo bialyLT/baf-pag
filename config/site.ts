@@ -32,7 +32,8 @@ export function generatePageMetadata({
   keywords = [],
   ogImage = "/og-image.jpg"
 }: PageMetadata): Metadata {
-  const fullTitle = `${title} | ${siteConfig.name}`;
+  // Evitar duplicación si el título ya contiene "BAF"
+  const fullTitle = title.toLowerCase().includes('baf') ? title : `${title} | ${siteConfig.name}`;
 
   return {
     title: fullTitle,
@@ -74,7 +75,7 @@ export function generatePageMetadata({
 
 // Metadatos predefinidos
 export const homeMetadata = generatePageMetadata({
-  title: "Inicio",
+  title: "BAF Bienes Raíces - Inmobiliaria en Posadas, Misiones",
   description: siteConfig.description,
   keywords: ["inicio", "propiedades en venta", "casas", "departamentos"]
 });
