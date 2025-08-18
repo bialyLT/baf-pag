@@ -56,8 +56,7 @@ export function BarChartMixed() {
   return (
     <Card className="flex flex-col">
       <CardHeader>
-        {/* <CardTitle>Bar Chart - Mixed</CardTitle>
-        <CardDescription>January - June 2024</CardDescription> */}
+       Otro titulo de estadisticas
       </CardHeader>
       <CardContent className="flex-1">
         <ChartContainer config={chartConfig}>

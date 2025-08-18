@@ -75,7 +75,30 @@ export function PropiedadCrearForm({propiedad}) {
           
           // Manejo de la respuesta de la subida de archivos
           const uploadResult = await uploadRes.json();
-          console.log("Archivos subidos:", uploadResult);
+          console.log("🔗 Archivos subidos (respuesta completa):", uploadResult);
+          console.log("🔗 URLs recibidas:", uploadResult.urls);
+          
+          // Actualizar la propiedad con las URLs de Cloudinary
+          if (uploadResult.urls && uploadResult.urls.length > 0 && result.id) {
+            const updateFormData = new FormData();
+            updateFormData.append("imagenes", JSON.stringify(uploadResult.urls));
+            
+            console.log("🔄 Actualizando propiedad con ID:", result.id);
+            console.log("🔄 URLs de Cloudinary a guardar:", uploadResult.urls);
+            
+            const updateRes = await fetch(`/api/propiedades/${result.id}`, {
+              method: "PATCH",
+              body: updateFormData,
+            });
+            
+            if (!updateRes.ok) {
+              const errorText = await updateRes.text();
+              console.error("Error en PATCH:", errorText);
+              throw new Error("Error al actualizar la propiedad con las URLs de las imágenes.");
+            }
+            
+            console.log("Propiedad actualizada con URLs de Cloudinary exitosamente");
+          }
           
           toast.success("Propiedad creada exitosamente!");
           
@@ -123,6 +146,21 @@ export function PropiedadCrearForm({propiedad}) {
             // Manejo de la respuesta de la subida de archivos
             const uploadResult = await uploadRes.json();
             console.log("Archivos subidos:", uploadResult);
+            
+            // Actualizar la propiedad con las URLs de Cloudinary
+            if (uploadResult.urls && uploadResult.urls.length > 0) {
+              const updateFormData = new FormData();
+              updateFormData.append("imagenes", JSON.stringify(uploadResult.urls));
+              
+              const updateRes = await fetch(`/api/propiedades/${propiedad.id}`, {
+                method: "PATCH",
+                body: updateFormData,
+              });
+              
+              if (!updateRes.ok) {
+                throw new Error("Error al actualizar la propiedad con las URLs de las imágenes.");
+              }
+            }
           }
             
           toast.success("Propiedad modificada exitosamente!");

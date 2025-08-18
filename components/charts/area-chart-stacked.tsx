@@ -42,10 +42,7 @@ export function AreaChartStacked() {
   return (
     <Card className="flex flex-col">
       <CardHeader>
-        {/* <CardTitle>Area Chart - Stacked</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription> */}
+        Titulo de estadisticas
       </CardHeader>
       <CardContent className="flex-1">
         <ChartContainer config={chartConfig}>

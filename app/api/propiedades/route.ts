@@ -38,7 +38,11 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ message: "Propiedad agregada" }, { status: 201 });
+    return NextResponse.json({ 
+      message: "Propiedad agregada",
+      id: nuevaPropiedad.id,
+      propiedad: nuevaPropiedad 
+    }, { status: 201 });
   } catch (error) {
     console.error("Error creando propiedad:", error);
     return NextResponse.json({ message: "Error interno del servidor" }, { status: 500 });

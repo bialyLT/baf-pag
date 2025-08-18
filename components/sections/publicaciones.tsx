@@ -1,8 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { HeaderSection } from "@/components/shared/header-section";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
-import Image from "next/image";
-import { normalizeTitle, truncate } from "@/lib/utils";
+import { CldImage } from 'next-cloudinary';
+import { truncate } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 
 export default function Publicaciones({propiedades}) {
@@ -19,17 +21,26 @@ export default function Publicaciones({propiedades}) {
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
              {sortedPropiedades.map((p, i) => {
+              // Solo usar Cloudinary - todas las imágenes deben ser URLs de Cloudinary
+              const firstImage = p.imagenes && p.imagenes.length > 0 ? p.imagenes[0] : null;
+              
               return (
                 <>
                 <div key={i} className="card bg-base-100 image-full w-90 shadow-xl">
                   <figure>
-                    <Image
-                      src={`/_static/images/propiedades/${normalizeTitle(p.title)}/${p.imagenes[0]}`}
-                      alt={`image ${i} de la publicacion: ${p.title}`}
-                      width={500}
-                      height={500}
-                      className="min-w-full hover:animate-customPing"
+                    {firstImage ? (
+                      <CldImage
+                        src={firstImage}
+                        alt={`image ${i} de la publicacion: ${p.title}`}
+                        width={500}
+                        height={500}
+                        className="min-w-full hover:animate-customPing"
                       />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span>Sin imagen</span>
+                      </div>
+                    )}
                   </figure>
                   <div className="card-body">
                     {p.estaVendida
