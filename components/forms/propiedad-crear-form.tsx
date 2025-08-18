@@ -27,87 +27,84 @@ export function PropiedadCrearForm({propiedad}) {
   });
 
   const handlePropiedadSubmit = async (data: z.infer<typeof propiedadSchema>) => {
-      // Crear FormData para los datos del formulario
-      const formData = new FormData();
-      if (!files) return;
-      files.forEach(file => {
-        formData.append("imagenes", file.name);
-      });
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("linkFacebook", data.linkFacebook || "");
-      formData.append("estaVendida", data.estaVendida.toString());
+      if (!files || files.length === 0) {
+        toast.error("Debes seleccionar al menos una imagen para subir");
+        return;
+      }
       
       if (!propiedad) {        
         try {
-          // Enviar datos del formulario
-          const res = await fetch("/api/propiedades", {
-            method: "POST",
-            body: formData,
-          });
-          
-          if (!res.ok) {
-            throw new Error("Algo salió mal al crear la propiedad.");
-          }
-          
-          // Manejo de la respuesta de la creación de la propiedad
-          const result = await res.json();
-          console.log("Propiedad creada:", result);
-          
-          // Solo si hay archivos seleccionados
+          // PASO 1: Subir las imágenes a Cloudinary PRIMERO
+          console.log("📤 Subiendo imágenes a Cloudinary...");
           const formUploadImages = new FormData();
           files.forEach(file => {
             formUploadImages.append("file", file);
           });
-          formUploadImages.append('id', data.title)
+          formUploadImages.append('id', data.title);
           
-          // Enviar archivos
           const uploadRes = await fetch('/api/upload', {
             method: "POST",
             body: formUploadImages,
           });
           
           if (!uploadRes.ok) {
-            throw new Error("Algo salió mal al subir los archivos al crear la publicación.");
+            throw new Error("Error al subir las imágenes a Cloudinary");
+          }
+          
+          const uploadResult = await uploadRes.json();
+          console.log("✅ Imágenes subidas a Cloudinary:", uploadResult.urls);
+          
+          if (!uploadResult.urls || uploadResult.urls.length === 0) {
+            throw new Error("No se recibieron URLs de Cloudinary");
           }
 
-          if (uploadRes.status == 401) throw new Error("Debes seleccionar al menos una imagen para subir");
+          // PASO 2: Crear la propiedad con las URLs de Cloudinary
+          console.log("📝 Creando propiedad con URLs de Cloudinary...");
+          const formData = new FormData();
           
-          // Manejo de la respuesta de la subida de archivos
-          const uploadResult = await uploadRes.json();
-          console.log("🔗 Archivos subidos (respuesta completa):", uploadResult);
-          console.log("🔗 URLs recibidas:", uploadResult.urls);
+          // Usar las URLs de Cloudinary, no los nombres de archivo
+          uploadResult.urls.forEach(url => {
+            formData.append("imagenes", url);
+          });
           
-          // Actualizar la propiedad con las URLs de Cloudinary
-          if (uploadResult.urls && uploadResult.urls.length > 0 && result.id) {
-            const updateFormData = new FormData();
-            updateFormData.append("imagenes", JSON.stringify(uploadResult.urls));
-            
-            console.log("🔄 Actualizando propiedad con ID:", result.id);
-            console.log("🔄 URLs de Cloudinary a guardar:", uploadResult.urls);
-            
-            const updateRes = await fetch(`/api/propiedades/${result.id}`, {
-              method: "PATCH",
-              body: updateFormData,
-            });
-            
-            if (!updateRes.ok) {
-              const errorText = await updateRes.text();
-              console.error("Error en PATCH:", errorText);
-              throw new Error("Error al actualizar la propiedad con las URLs de las imágenes.");
-            }
-            
-            console.log("Propiedad actualizada con URLs de Cloudinary exitosamente");
+          formData.append("title", data.title);
+          formData.append("description", data.description);
+          formData.append("linkFacebook", data.linkFacebook || "");
+          formData.append("estaVendida", data.estaVendida.toString());
+          
+          const res = await fetch("/api/propiedades", {
+            method: "POST",
+            body: formData,
+          });
+          
+          if (!res.ok) {
+            throw new Error("Error al crear la propiedad en la base de datos");
           }
           
+          const result = await res.json();
+          console.log("✅ Propiedad creada exitosamente:", result);
+          
           toast.success("Propiedad creada exitosamente!");
+          form.reset();
+          setFiles([]);
           
         } catch (error) {
-          console.error('Error:', error);
+          console.error('❌ Error:', error);
           toast.error(error.message);
         }
       } else {
+        // LÓGICA DE EDICIÓN
         try {
+          // Crear FormData para los datos del formulario (edición)
+          const formData = new FormData();
+          files.forEach(file => {
+            formData.append("imagenes", file.name);
+          });
+          formData.append("title", data.title);
+          formData.append("description", data.description);
+          formData.append("linkFacebook", data.linkFacebook || "");
+          formData.append("estaVendida", data.estaVendida.toString());
+          
           // Enviar datos del formulario
           const res = await fetch(`/api/propiedades/${propiedad.id}`, {
             method: "PATCH",
