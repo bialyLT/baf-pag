@@ -47,7 +47,7 @@ export type InfoList = {
   description: string;
 };
 
-interface Propiedad {
+export interface Propiedad {
   id: number;
   title: string;
   description: string;

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import HeroLanding from "@/components/sections/hero-landing";
 import Publicaciones from "@/components/sections/publicaciones";
-import { Propiedad } from "@prisma/client";
+import { Propiedad } from "@/types";
 
 interface HomePageContentProps {
   propiedades: Propiedad[];

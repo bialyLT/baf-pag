@@ -1,5 +1,5 @@
 import { getAllPropiedades } from "@/lib/propiedades";
-import { Propiedad } from "@prisma/client";
+import { Propiedad } from "@/types";
 
 /**
  * Hook para obtener propiedades con revalidación

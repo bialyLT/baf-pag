@@ -26,15 +26,7 @@ import { truncate } from "@/lib/utils";
 import { CldImage } from 'next-cloudinary';
 import { Icons } from "../shared/icons";
 import { cn } from "@/lib/utils";
-
-interface Propiedad {
-  id: string;
-  title: string;
-  description: string;
-  linkFacebook: string;
-  imagenes: string[];
-  estaVendida: boolean;
-}
+import { Propiedad } from "@/types";
 
 interface PropiedadesTableProps {
   propiedades: Propiedad[];

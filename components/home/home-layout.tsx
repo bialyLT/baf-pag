@@ -3,7 +3,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { NavMobile } from "@/components/layout/mobile-nav";
 import { Navbar } from "@/components/layout/navbar";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
-import { Propiedad } from "@prisma/client";
+import { Propiedad } from "@/types";
 
 interface HomeLayoutProps {
   children: ReactNode;
