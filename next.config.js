@@ -39,7 +39,7 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["@prisma/client"],
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
-    optimizeCss: true,
+    optimizeCss: false, // Deshabilitar temporalmente para evitar el error de critters
   },
   
   // Optimizar compilación TypeScript
