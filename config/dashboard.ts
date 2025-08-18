@@ -13,7 +13,6 @@ export const sidebarLinks: SidebarNavItem[] = [
   {
     title: "OPCIONES",
     items: [
-      { href: "/", icon: "home", title: "Página de Inicio", authorizeOnly: UserRole.ADMIN, },
       { href: "/panel-de-control/configuraciones", icon: "settings", title: "Configuración", authorizeOnly: UserRole.ADMIN, },
       {
         href: "#",

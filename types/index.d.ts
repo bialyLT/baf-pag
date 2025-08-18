@@ -48,7 +48,7 @@ export type InfoList = {
 };
 
 interface Propiedad {
-  id: string;
+  id: number;
   title: string;
   description: string;
   linkFacebook: string;

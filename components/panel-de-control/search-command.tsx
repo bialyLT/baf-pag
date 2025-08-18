@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { SidebarNavItem } from "@/types";
+import { usePropiedades } from "@/components/dashboard/propiedades-context";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -16,9 +17,15 @@ import {
 } from "@/components/ui/command";
 import { Icons } from "@/components/shared/icons";
 
-export function SearchCommand({ links }: { links: SidebarNavItem[] }) {
+interface SearchCommandProps {
+  links: SidebarNavItem[];
+}
+
+export function SearchCommand({ links }: SearchCommandProps) {
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
   const router = useRouter();
+  const propiedades = usePropiedades();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -35,6 +42,18 @@ export function SearchCommand({ links }: { links: SidebarNavItem[] }) {
     setOpen(false);
     command();
   }, []);
+
+  // Filter propiedades based on search
+  const filteredPropiedades = React.useMemo(() => {
+    if (!search) return propiedades.slice(0, 8); // Show first 8 when no search
+    
+    const filtered = propiedades.filter((propiedad) =>
+      propiedad.title.toLowerCase().includes(search.toLowerCase()) ||
+      propiedad.description.toLowerCase().includes(search.toLowerCase())
+    );
+    
+    return filtered.slice(0, 10); // Limit to 10 results max
+  }, [search, propiedades]);
 
   return (
     <>
@@ -54,27 +73,48 @@ export function SearchCommand({ links }: { links: SidebarNavItem[] }) {
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Tipea el nombre de una propiedad..." />
+        <CommandInput 
+          placeholder="Buscar propiedades..." 
+          value={search}
+          onValueChange={setSearch}
+        />
         <CommandList>
-          <CommandEmpty>Ningun resultado encontrado.</CommandEmpty>
-          {links.map((section) => (
-            <CommandGroup key={section.title} heading={section.title}>
-              {section.items.map((item) => {
-                const Icon = Icons[item.icon || "arrowRight"];
-                return (
-                  <CommandItem
-                    key={item.title}
-                    onSelect={() => {
-                      runCommand(() => router.push(item.href as string));
-                    }}
-                  >
-                    <Icon className="mr-2 size-5" />
-                    {item.title}
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-          ))}
+          <CommandEmpty>Ninguna propiedad encontrada.</CommandEmpty>
+          
+          {/* Propiedades Results */}
+          <CommandGroup heading={`Propiedades (${propiedades.length})`}>
+            {filteredPropiedades.map((propiedad) => (
+              <CommandItem
+                key={propiedad.id}
+                onSelect={() => {
+                  runCommand(() => router.push(`/propiedades/${propiedad.id}`));
+                }}
+              >
+                <Icons.home className="mr-2 h-4 w-4 flex-shrink-0" />
+                <div className="flex flex-col">
+                  <span className="font-medium">{propiedad.title}</span>
+                  <span className="text-sm text-muted-foreground truncate">
+                    {propiedad.description.length > 50 
+                      ? `${propiedad.description.substring(0, 50)}...` 
+                      : propiedad.description}
+                    {propiedad.estaVendida ? " • VENDIDA" : ""}
+                  </span>
+                </div>
+              </CommandItem>
+            ))}
+            {propiedades.length > filteredPropiedades.length && (
+              <CommandItem
+                onSelect={() => {
+                  runCommand(() => router.push("/panel-de-control"));
+                }}
+              >
+                <Icons.search className="mr-2 h-4 w-4 flex-shrink-0" />
+                <span className="text-muted-foreground">
+                  Ver todas las propiedades ({propiedades.length})
+                </span>
+              </CommandItem>
+            )}
+          </CommandGroup>
         </CommandList>
       </CommandDialog>
     </>

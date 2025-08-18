@@ -8,12 +8,12 @@ export const metadata = dashboardMetadata;
 
 export default async function DashboardPageRoute() {
   const user = await getCurrentUser();
-  const publicaciones = await getAllPropiedades();
+  const propiedades = await getAllPropiedades();
 
   return (
     <DashboardPage 
       userName={user?.name || "Usuario"} 
-      propiedades={publicaciones as unknown as Propiedad[]} 
+      propiedades={propiedades as unknown as Propiedad[]} 
     />
   );
 }

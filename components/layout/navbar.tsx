@@ -24,11 +24,13 @@ import { ModalContext } from "../modals/providers"
 import { Skeleton } from "../ui/skeleton";
 import { ModeToggle } from "./mode-toggle";
 import { UserAccountNav } from "./user-account-nav";
+import { SearchCommand } from "../panel-de-control/search-command";
+import { PropiedadesProvider } from "../dashboard/propiedades-context";
 
 interface NavbarProps {
   scroll?: boolean;
   large?: boolean;
-  propiedades;
+  propiedades?;
 }
 
 export function Navbar({ scroll = false, propiedades }: NavbarProps) {
@@ -92,6 +94,14 @@ export function Navbar({ scroll = false, propiedades }: NavbarProps) {
 
       </NavigationMenuList>
       </NavigationMenu>
+      
+      {/* Search Command */}
+      <div className="flex-1 max-w-md mx-4">
+        <PropiedadesProvider propiedades={propiedades || []}>
+          <SearchCommand links={[]} />
+        </PropiedadesProvider>
+      </div>
+      
       {/* boton para iniciar sesion y entrar al panel de admin */}
       {session ?   
       <UserAccountNav />
