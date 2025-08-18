@@ -1,5 +1,5 @@
 {
-  "name": "baf-bienes-raices",
+  "name": "BAFBienesRaices",
   "version": "1.8.0",
   "private": true,
   "author": {
@@ -8,8 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
-    "build:full": "prisma generate && prisma migrate deploy && next build",
+    "build": "prisma generate && prisma migrate deploy && next build",
     "turbo": "next dev --turbo",
     "start": "next start",
     "lint": "next lint",
@@ -64,7 +63,6 @@
     "cmdk": "^1.0.0",
     "concurrently": "^8.2.2",
     "contentlayer2": "^0.5.0",
-    "critters": "^0.0.25",
     "date-fns": "^3.6.0",
     "formidable": "^3.5.1",
     "lucide-react": "^0.414.0",
@@ -103,7 +101,6 @@
     "@types/react-dom": "18.3.0",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.12.10",
-    "dotenv-cli": "^10.0.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",
     "eslint-config-prettier": "^9.1.0",
