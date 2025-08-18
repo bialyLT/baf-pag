@@ -1,6 +1,6 @@
 import { UserRole } from "@prisma/client";
-
 import { SidebarNavItem } from "types";
+import { generatePageMetadata } from "@/config/site";
 
 export const sidebarLinks: SidebarNavItem[] = [
   {
@@ -25,3 +25,22 @@ export const sidebarLinks: SidebarNavItem[] = [
     ],
   },
 ];
+
+// Dashboard metadata
+export const dashboardMetadata = generatePageMetadata({
+  title: "Panel de control",
+  description: "Panel de control de BAF Bienes Raíces",
+  keywords: ["panel", "admin", "dashboard"]
+});
+
+export const settingsMetadata = generatePageMetadata({
+  title: "Configuraciones",
+  description: "Administra tu cuenta y las configuraciones de la página",
+  keywords: ["configuraciones", "settings", "cuenta"]
+});
+
+export const statsMetadata = generatePageMetadata({
+  title: "Estadísticas",
+  description: "Estadísticas del sistema de BAF Bienes Raíces",
+  keywords: ["estadísticas", "métricas", "análisis"]
+});

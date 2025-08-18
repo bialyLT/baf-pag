@@ -1,23 +1,18 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { ErrorPage } from '@/components/home';
 
 export default function Error({
   reset,
 }: {
   reset: () => void;
 }) {
-
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <h2 className="mb-5 text-center">Algo no anduvo como se esperaba!</h2>
-      <Button
-        type="submit"
-        variant="default"
-        onClick={() => reset()}
-      >
-        Inténtalo de nuevo.
-      </Button>
-    </div>
+    <ErrorPage 
+      title="Algo no anduvo como se esperaba!"
+      description="Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo."
+      actionText="Inténtalo de nuevo"
+      onAction={reset}
+    />
   );
 }
