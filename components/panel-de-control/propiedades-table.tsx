@@ -15,6 +15,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { Dialog, DialogTrigger } from "../ui/dialog";
@@ -27,27 +33,29 @@ import { CldImage } from 'next-cloudinary';
 import { Icons } from "../shared/icons";
 import { cn } from "@/lib/utils";
 import { Propiedad } from "@/types";
+import { MoreHorizontal, Eye, Edit, Trash2, RefreshCw } from "lucide-react";
 
 interface PropiedadesTableProps {
   propiedades: Propiedad[];
 }
 
 export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
-  const [rowSelection, setRowSelection] = useState({});
+  const [loading, setLoading] = useState<string | null>(null);
 
-  const [loading, setLoading] = useState(false);
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
 
-  const handleToggleVendida = async () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    if (selectedRows.length !== 1) {
-      toast.error("Selecciona una propiedad para modificar.");
-      return;
-    }
-
-    const propiedad = selectedRows[0].original;
+  const handleToggleVendida = async (propiedad: Propiedad) => {
     const nuevaVentaEstado = !propiedad.estaVendida;
-
-    setLoading(true);
+    setLoading(`toggle-${propiedad.id}`);
 
     try {
       const response = await fetch(
@@ -67,40 +75,43 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
         `Estado cambiado a ${nuevaVentaEstado ? "Vendida" : "Disponible"}`
       );
 
-      // Actualizar UI manualmente sin recargar la página
-      propiedad.estaVendida = nuevaVentaEstado;
-      table.resetRowSelection();
+      // Recargar página para actualizar datos
+      window.location.reload();
     } catch (error) {
       console.error(error);
       toast.error("Error al actualizar el estado de la propiedad.");
     } finally {
-      setLoading(false);
+      setLoading(null);
+    }
+  };
+
+  const handleEliminar = async (propiedad: Propiedad) => {
+    if (!confirm("¿Estás seguro de que quieres eliminar esta propiedad?")) {
+      return;
+    }
+
+    setLoading(`delete-${propiedad.id}`);
+
+    try {
+      const response = await fetch(`/api/propiedades/${propiedad.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar la propiedad.");
+      }
+
+      toast.success("Propiedad eliminada exitosamente.");
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al eliminar la propiedad.");
+    } finally {
+      setLoading(null);
     }
   };
 
   const columns: ColumnDef<Propiedad>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "imagenes",
       header: "Imagen",
@@ -143,11 +154,11 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
     },
     {
       accessorKey: "description",
-      header: "Descripción",
+      header: () => <div className="hidden lg:block">Descripción</div>,
       cell: ({ row }) => {
         const desc: string = row.getValue("description");
         return (
-          <div className="text-left text-sm text-muted-foreground py-3 px-2 max-w-md">
+          <div className="hidden lg:block text-left text-sm text-muted-foreground py-3 px-2 max-w-md">
             <div className="line-clamp-3">
               {truncate(desc, 120)}
             </div>
@@ -176,6 +187,20 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
       },
     },
     {
+      accessorKey: "updatedAt",
+      header: "Última modificación",
+      cell: ({ row }) => {
+        const updatedAt: string = row.getValue("updatedAt");
+        return (
+          <div className="text-center py-3 px-2 min-w-[140px]">
+            <div className="text-sm text-muted-foreground">
+              {formatDate(updatedAt)}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "estaVendida",
       header: "Estado",
       cell: ({ row }) => {
@@ -195,59 +220,207 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
         );
       },
     },
+    {
+      id: "acciones",
+      header: "Acciones",
+      cell: ({ row }) => {
+        const propiedad = row.original;
+        
+        return (
+          <div className="flex items-center justify-center py-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Abrir menú</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem 
+                  onClick={() => window.open(`/propiedades/${propiedad.id}`, '_blank')}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  Ver publicación
+                </DropdownMenuItem>
+                
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Modificar publicación
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                  <PropiedadCrearModal esAlta={false} propiedad={propiedad} />
+                </Dialog>
+                
+                <DropdownMenuItem 
+                  onClick={() => handleToggleVendida(propiedad)}
+                  disabled={loading === `toggle-${propiedad.id}`}
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  {loading === `toggle-${propiedad.id}` 
+                    ? "Actualizando..." 
+                    : "Cambiar estado de venta"
+                  }
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem 
+                  onClick={() => handleEliminar(propiedad)}
+                  disabled={loading === `delete-${propiedad.id}`}
+                  className="text-red-600 focus:text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {loading === `delete-${propiedad.id}` 
+                    ? "Eliminando..." 
+                    : "Eliminar publicación"
+                  }
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+    },
   ];
 
   const table = useReactTable({
     data: propiedades,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    onRowSelectionChange: setRowSelection,
-    state: {
-      rowSelection,
-    },
   });
 
-  const handleEliminarBoton = () => {
-    if (table.getFilteredSelectedRowModel().rows.length > 0) {
-      table.getFilteredSelectedRowModel().rows.forEach(async (r) => {
-        try {
-          const response = await fetch(
-            `/api/propiedades/${r.original.id}?title=${encodeURIComponent(r.original.title)}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Error al eliminar la publicación");
-          }
-          const result = await response.json();
-          console.log(result.message);
-          toast.success("La publicacion se ha eliminado correctamente");
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      });
-    } else {
-      toast.error("Debes seleccionar alguna publicacion para poder eliminarla");
-    }
-  };
-
-  const handleModificarBoton = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-
-    if (selectedRows.length == 1) {
-      return selectedRows[0].original;
-    } else {
-      console.error("No hay filas seleccionadas");
-    }
-  };
+  // Componente de tarjeta para móviles
+  const MobileCard = ({ propiedad }: { propiedad: Propiedad }) => (
+    <div className="border rounded-lg p-4 bg-card shadow-sm">
+      <div className="flex gap-3">
+        {/* Imagen */}
+        <div className="flex-shrink-0">
+          {propiedad.imagenes && propiedad.imagenes.length > 0 ? (
+            <CldImage
+              src={propiedad.imagenes[0]}
+              alt={`Imagen de ${propiedad.title}`}
+              width={80}
+              height={80}
+              className="w-20 h-20 rounded-md object-cover border"
+            />
+          ) : (
+            <div className="w-20 h-20 bg-muted rounded-md flex items-center justify-center border">
+              <Icons.home className="w-6 h-6 text-muted-foreground" />
+            </div>
+          )}
+        </div>
+        
+        {/* Contenido */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between mb-2">
+            <h3 className="font-semibold text-base line-clamp-2 pr-2 flex-1">
+              {propiedad.title}
+            </h3>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0 flex-shrink-0 ml-2">
+                  <span className="sr-only">Abrir menú</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem 
+                  onClick={() => window.open(`/propiedades/${propiedad.id}`, '_blank')}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  Ver publicación
+                </DropdownMenuItem>
+                
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Modificar publicación
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                  <PropiedadCrearModal esAlta={false} propiedad={propiedad} />
+                </Dialog>
+                
+                <DropdownMenuItem 
+                  onClick={() => handleToggleVendida(propiedad)}
+                  disabled={loading === `toggle-${propiedad.id}`}
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  {loading === `toggle-${propiedad.id}` 
+                    ? "Actualizando..." 
+                    : "Cambiar estado de venta"
+                  }
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem 
+                  onClick={() => handleEliminar(propiedad)}
+                  disabled={loading === `delete-${propiedad.id}`}
+                  className="text-red-600 focus:text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {loading === `delete-${propiedad.id}` 
+                    ? "Eliminando..." 
+                    : "Eliminar publicación"
+                  }
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          
+          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+            {truncate(propiedad.description, 100)}
+          </p>
+          
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              {propiedad.estaVendida ? (
+                <Badge variant="destructive" className="text-xs px-2 py-1">
+                  Vendida
+                </Badge>
+              ) : (
+                <Badge variant="default" className="text-xs px-2 py-1 bg-green-100 text-green-800 hover:bg-green-200">
+                  Disponible
+                </Badge>
+              )}
+              
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => window.open(propiedad.linkFacebook, '_blank')}
+                className="p-1 h-auto"
+                title="Ver en Facebook"
+              >
+                <Icons.facebook className="w-4 h-4 text-blue-600" />
+              </Button>
+            </div>
+            
+            <div className="text-xs text-muted-foreground">
+              {formatDate(propiedad.updatedAt)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
-      <div className="w-full rounded-md border">
+      {/* Botón de agregar arriba de todo */}
+      <div className="flex justify-start">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button size="lg" className="font-semibold">
+              Añadir publicación
+            </Button>
+          </DialogTrigger>
+          <PropiedadCrearModal esAlta={true} propiedad={null} />
+        </Dialog>
+      </div>
+
+      {/* Vista de escritorio y tablet - Tabla */}
+      <div className="hidden md:block w-full rounded-md border">
         <Table className="w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -272,8 +445,7 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="h-24 border-b"
+                  className="h-24 border-b hover:bg-muted/50 dark:hover:bg-muted/20 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="p-4 align-top">
@@ -298,39 +470,18 @@ export function PropiedadesTable({ propiedades }: PropiedadesTableProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center gap-5">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Añadir publicación</Button>
-          </DialogTrigger>
-          <PropiedadCrearModal esAlta={true} propiedad={null} />
-        </Dialog>
-        <Button variant="destructive" onClick={handleEliminarBoton}>
-          Eliminar publicación
-        </Button>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              disabled={table.getFilteredSelectedRowModel().rows.length != 1}
-              onClick={handleModificarBoton}
-            >
-              Modificar publicación
-            </Button>
-          </DialogTrigger>
-          <PropiedadCrearModal
-            esAlta={false}
-            propiedad={handleModificarBoton()}
-          />
-        </Dialog>
-        <Button
-          variant="ghost"
-          onClick={handleToggleVendida}
-          disabled={
-            table.getFilteredSelectedRowModel().rows.length !== 1 || loading
-          }
-        >
-          {loading ? "Actualizando..." : "Cambiar estado de venta"}
-        </Button>
+
+      {/* Vista móvil - Tarjetas */}
+      <div className="md:hidden space-y-4">
+        {propiedades?.length ? (
+          propiedades.map((propiedad) => (
+            <MobileCard key={propiedad.id} propiedad={propiedad} />
+          ))
+        ) : (
+          <div className="border rounded-lg p-8 text-center text-muted-foreground">
+            No hay ninguna propiedad cargada.
+          </div>
+        )}
       </div>
     </>
   );

@@ -8,14 +8,55 @@ import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
+import { CldImage } from 'next-cloudinary';
+import { X, Upload, Image as ImageIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function PropiedadCrearForm({propiedad}) {
   const [files, setFiles] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>(
+    propiedad?.imagenes || []
+  );
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<string>("");
+
+  // Funciones para manejar imágenes
+  const generatePreview = useCallback((file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+  }, []);
+
+  const handleFilesChange = useCallback(async (newFiles: FileList | null) => {
+    if (!newFiles) return;
+    
+    const fileArray = Array.from(newFiles);
+    setFiles(prev => [...prev, ...fileArray]);
+    
+    // Generar vistas previas para los nuevos archivos
+    const newPreviews = await Promise.all(
+      fileArray.map(file => generatePreview(file))
+    );
+    setImagePreviews(prev => [...prev, ...newPreviews]);
+  }, [generatePreview]);
+
+  const removeNewImage = useCallback((index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const removeExistingImage = useCallback((index: number) => {
+    const imageToRemove = existingImages[index];
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
+    setDeletedImages(prev => [...prev, imageToRemove]);
+  }, [existingImages]);
 
   const form = useForm<z.infer<typeof propiedadSchema>>({
     resolver: zodResolver(propiedadSchema),
@@ -29,8 +70,10 @@ export function PropiedadCrearForm({propiedad}) {
   });
 
   const handlePropiedadSubmit = async (data: z.infer<typeof propiedadSchema>) => {
-      if (!files || files.length === 0) {
-        toast.error("Debes seleccionar al menos una imagen para subir");
+      // Validar que haya al menos una imagen (nuevas o existentes)
+      const totalImages = files.length + existingImages.length;
+      if (totalImages === 0) {
+        toast.error("Debes tener al menos una imagen para la propiedad");
         return;
       }
       
@@ -209,6 +252,7 @@ export function PropiedadCrearForm({propiedad}) {
           toast.success(`Propiedad creada exitosamente con ${allUrls.length} imágenes!`);
           form.reset();
           setFiles([]);
+          setImagePreviews([]);
           
         } catch (error) {
           console.error('❌ Error:', error);
@@ -218,78 +262,82 @@ export function PropiedadCrearForm({propiedad}) {
           setUploadProgress("");
         }
       } else {
-        // LÓGICA DE EDICIÓN
+        // LÓGICA DE EDICIÓN SIMPLIFICADA
+        setIsUploading(true);
         try {
-          // Crear FormData para los datos del formulario (edición)
-          const formData = new FormData();
-          files.forEach(file => {
-            formData.append("imagenes", file.name);
-          });
-          formData.append("title", data.title);
-          formData.append("description", data.description);
-          formData.append("linkFacebook", data.linkFacebook || "");
-          formData.append("estaVendida", data.estaVendida.toString());
+          let allImageUrls = [...existingImages]; // Comenzar con las imágenes existentes
           
-          // Enviar datos del formulario
-          const res = await fetch(`/api/propiedades/${propiedad.id}`, {
-            method: "PATCH",
-            body: formData,
-          });
-
-          if (res.status == 401) throw new Error("Debes ingresar al menos una foto");
-          
-          if (!res.ok) {
-            throw new Error("Algo salió mal al editar la propiedad.");
-          }
-          
-          // Manejo de la respuesta de la edicion de la propiedad
-          const result = await res.json();
-          console.log("Propiedad editada:", result);
-          
-          // Solo si hay archivos seleccionados
+          // Paso 1: Si hay nuevas imágenes, subirlas
           if (files.length > 0) {
+            setUploadProgress(`📤 Subiendo ${files.length} nuevas imágenes...`);
             
             const formUploadImages = new FormData();
             files.forEach(file => {
               formUploadImages.append("file", file);
             });
-            formUploadImages.append("id", data.title)
-            
-            // Enviar archivos
+            formUploadImages.append("id", data.title);
+            formUploadImages.append('isFirstBatch', 'true');
+
             const uploadRes = await fetch('/api/upload', {
               method: "POST",
               body: formUploadImages,
             });
-            
+
             if (!uploadRes.ok) {
-              throw new Error("Algo salió mal al subir los archivos al modificar la publicación.");
+              throw new Error("Error al subir las nuevas imágenes");
             }
-            
-            // Manejo de la respuesta de la subida de archivos
+
             const uploadResult = await uploadRes.json();
-            console.log("Archivos subidos:", uploadResult);
-            
-            // Actualizar la propiedad con las URLs de Cloudinary
-            if (uploadResult.urls && uploadResult.urls.length > 0) {
-              const updateFormData = new FormData();
-              updateFormData.append("imagenes", JSON.stringify(uploadResult.urls));
-              
-              const updateRes = await fetch(`/api/propiedades/${propiedad.id}`, {
-                method: "PATCH",
-                body: updateFormData,
-              });
-              
-              if (!updateRes.ok) {
-                throw new Error("Error al actualizar la propiedad con las URLs de las imágenes.");
-              }
+            if (uploadResult.success && uploadResult.urls) {
+              allImageUrls = [...allImageUrls, ...uploadResult.urls];
             }
           }
-            
-          toast.success("Propiedad modificada exitosamente!");
+
+          // Paso 2: Actualizar la propiedad con todos los datos
+          setUploadProgress("💾 Guardando cambios...");
           
+          const updateFormData = new FormData();
+          updateFormData.append("title", data.title);
+          updateFormData.append("description", data.description);
+          updateFormData.append("linkFacebook", data.linkFacebook || "");
+          updateFormData.append("estaVendida", data.estaVendida.toString());
+          
+          // Enviar todas las imágenes (existentes + nuevas)
+          allImageUrls.forEach(url => {
+            updateFormData.append("existingImages", url);
+          });
+
+          // Enviar las imágenes eliminadas para borrar de Cloudinary
+          deletedImages.forEach(url => {
+            updateFormData.append("deletedImages", url);
+          });
+
+          const res = await fetch(`/api/propiedades/${propiedad.id}`, {
+            method: "PATCH",
+            body: updateFormData,
+          });
+          
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || "Error al actualizar la propiedad");
+          }
+
+          const totalImages = allImageUrls.length;
+          toast.success(`Propiedad modificada exitosamente! ${totalImages} imágenes totales.`);
+          
+          // Limpiar estado de nuevas imágenes
+          setFiles([]);
+          setImagePreviews([]);
+          setDeletedImages([]);
+          // Actualizar las imágenes existentes con el nuevo estado
+          setExistingImages(allImageUrls);
+            
         } catch (error) {
-          console.error('Error:', error);
-          toast.error(error.message);
+          console.error('❌ Error:', error);
+          toast.error(error.message || "Error al modificar la propiedad");
+        } finally {
+          setIsUploading(false);
+          setUploadProgress("");
         }
       }
     };
@@ -350,17 +398,104 @@ export function PropiedadCrearForm({propiedad}) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Imágenes</FormLabel>
+              
+              {/* Mostrar imágenes existentes solo en modo edición */}
+              {propiedad && existingImages.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Imágenes actuales:</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {existingImages.map((imageUrl, index) => (
+                      <div key={`existing-${index}`} className="relative group">
+                        <CldImage
+                          src={imageUrl}
+                          alt={`Imagen existente ${index + 1}`}
+                          width={150}
+                          height={150}
+                          className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeExistingImage(index)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Vista previa de nuevas imágenes */}
+              {imagePreviews.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    {propiedad ? "Nuevas imágenes a agregar:" : "Vista previa:"}
+                  </h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={`preview-${index}`} className="relative group">
+                        <img
+                          src={preview}
+                          alt={`Vista previa ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg border-2 border-primary/30"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive" 
+                          size="sm"
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeNewImage(index)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                        <div className="absolute bottom-1 left-1 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded">
+                          Nuevo
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Input para seleccionar archivos con estilo mejorado */}
               <FormControl>
-                <Input type="file" multiple onChange={e => {
-                  if (e.target.files) {
-                    // Convertir los archivos seleccionados a un array
-                    const selectedFiles = Array.from(e.target.files);
-                    // Actualizar el estado agregando los nuevos archivos a los existentes
-                    setFiles([...selectedFiles]);
-                  }
-                }} />
+                <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 hover:border-muted-foreground/40 transition-colors dark:border-muted-foreground/20 dark:hover:border-muted-foreground/30">
+                  <div className="text-center">
+                    <Upload className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
+                    <div className="mb-2">
+                      <label htmlFor="image-upload" className="cursor-pointer">
+                        <span className="mt-2 block text-sm font-medium text-foreground">
+                          {files.length > 0 
+                            ? `${files.length} archivo(s) seleccionado(s)`
+                            : "Haz clic para seleccionar imágenes"
+                          }
+                        </span>
+                        <span className="mt-1 block text-xs text-muted-foreground">
+                          PNG, JPG, GIF hasta 10MB cada una
+                        </span>
+                      </label>
+                      <Input
+                        id="image-upload"
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleFilesChange(e.target.files)}
+                      />
+                    </div>
+                  </div>
+                </div>
               </FormControl>
-              <FormDescription>Ingresa las imágenes de la propiedad.</FormDescription>
+              
+              <FormDescription>
+                {propiedad 
+                  ? "Agrega nuevas imágenes o elimina las existentes. Los cambios se aplicarán al guardar."
+                  : "Selecciona las imágenes de la propiedad. Puedes seleccionar múltiples archivos."
+                }
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -389,10 +524,10 @@ export function PropiedadCrearForm({propiedad}) {
         
         {/* Indicador de progreso */}
         {isUploading && uploadProgress && (
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
-            <p className="text-sm text-blue-700">{uploadProgress}</p>
-            <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full animate-pulse w-3/5"></div>
+          <div className="p-4 bg-primary/10 border border-primary/20 rounded-md dark:bg-primary/5 dark:border-primary/10">
+            <p className="text-sm text-primary dark:text-primary">{uploadProgress}</p>
+            <div className="mt-2 w-full bg-primary/20 rounded-full h-2 dark:bg-primary/10">
+              <div className="bg-primary h-2 rounded-full animate-pulse w-3/5"></div>
             </div>
           </div>
         )}
@@ -400,12 +535,17 @@ export function PropiedadCrearForm({propiedad}) {
         <Button 
           type="submit" 
           disabled={isUploading}
-          className={isUploading ? "opacity-50 cursor-not-allowed" : ""}
+          className={cn("min-w-[120px]", isUploading && "cursor-not-allowed")}
+          size="lg"
         >
-          {isUploading 
-            ? (propiedad ? "Modificando..." : "Creando...") 
-            : (propiedad ? "Modificar" : "Crear")
-          }
+          {isUploading ? (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+              {propiedad ? "Modificando..." : "Creando..."}
+            </div>
+          ) : (
+            propiedad ? "Modificar propiedad" : "Crear propiedad"
+          )}
         </Button>
       </form>
     </Form>

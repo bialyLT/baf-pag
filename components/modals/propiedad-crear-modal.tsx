@@ -11,7 +11,7 @@ import { PropiedadCrearForm } from "../forms/propiedad-crear-form"
 
 export function PropiedadCrearModal({esAlta, propiedad}) {
   return (
-    <DialogContent className="sm:max-w-md max-h-screen overflow-y-auto">
+    <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           {esAlta ? <DialogTitle>Nueva publicación</DialogTitle> : <DialogTitle>Modificar publicación</DialogTitle>}
           <DialogDescription>

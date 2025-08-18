@@ -54,4 +54,6 @@ export interface Propiedad {
   linkFacebook: string;
   imagenes: string[];
   estaVendida: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

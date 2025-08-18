@@ -13,18 +13,21 @@ interface DashboardPageProps {
 
 export function DashboardPage({ userName, propiedades }: DashboardPageProps) {
   return (
-    <>
+    <div className="space-y-6">
       <DashboardHeader
         heading="Panel de control"
         text={`Bienvenido ${userName}!`}
       />
+      
+      {/* Línea separadora */}
+      <div className="border-b border-border"></div>
       
       {propiedades.length ? (
         <PropiedadesTable propiedades={propiedades} />
       ) : (
         <EmptyPropiedadesState />
       )}
-    </>
+    </div>
   );
 }
 

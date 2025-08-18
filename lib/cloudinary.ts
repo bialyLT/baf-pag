@@ -45,4 +45,45 @@ export async function deleteFromCloudinary(folder: string): Promise<void> {
   }
 }
 
+export async function deleteSpecificImagesFromCloudinary(imageUrls: string[]): Promise<void> {
+  try {
+    console.log(`🗑️ Intentando eliminar ${imageUrls.length} imágenes específicas de Cloudinary`);
+    
+    // Extraer public_ids de las URLs de Cloudinary
+    const publicIds: string[] = imageUrls
+      .map(url => {
+        // URL ejemplo: https://res.cloudinary.com/dm3mcv5us/image/upload/v1234567890/baf-propiedades/folder/filename.jpg
+        const matches = url.match(/\/baf-propiedades\/(.+)$/);
+        if (matches) {
+          // Remover la extensión del archivo
+          const pathWithoutExtension = matches[1].replace(/\.[^/.]+$/, '');
+          return `baf-propiedades/${pathWithoutExtension}`;
+        }
+        return null;
+      })
+      .filter((id): id is string => id !== null);
+
+    console.log(`📋 Public IDs extraídos:`, publicIds);
+
+    if (publicIds.length > 0) {
+      const result = await cloudinary.api.delete_resources(publicIds);
+      console.log(`✅ Resultado de eliminación:`, result);
+      
+      // Log de éxitos y errores
+      if (result.deleted) {
+        Object.entries(result.deleted).forEach(([publicId, status]) => {
+          if (status === 'deleted') {
+            console.log(`✅ Eliminada: ${publicId}`);
+          } else {
+            console.log(`⚠️ No eliminada: ${publicId} - ${status}`);
+          }
+        });
+      }
+    }
+  } catch (error) {
+    console.error('❌ Error eliminando imágenes específicas de Cloudinary:', error);
+    throw error;
+  }
+}
+
 export default cloudinary;

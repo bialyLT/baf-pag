@@ -10,6 +10,11 @@ export const getAllPropiedades = async () => {
         linkFacebook: true,
         imagenes: true,
         estaVendida: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        updatedAt: 'desc'
       },
     });
 
@@ -47,6 +52,8 @@ export const getPropiedadPorId = async (id: number) => {
         linkFacebook: true,
         imagenes: true,
         estaVendida: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
