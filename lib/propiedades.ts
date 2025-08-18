@@ -18,7 +18,12 @@ export const getAllPropiedades = async () => {
       },
     });
 
-    return propiedades;
+    // Serializar las fechas a strings
+    return propiedades.map(propiedad => ({
+      ...propiedad,
+      createdAt: propiedad.createdAt.toISOString(),
+      updatedAt: propiedad.updatedAt.toISOString(),
+    }));
   } catch (error) {
     console.error("Error al obtener las propiedades en lib:", error);
     return [];
@@ -57,7 +62,14 @@ export const getPropiedadPorId = async (id: number) => {
       },
     });
 
-    return propiedad;
+    if (!propiedad) return null;
+
+    // Serializar las fechas a strings
+    return {
+      ...propiedad,
+      createdAt: propiedad.createdAt.toISOString(),
+      updatedAt: propiedad.updatedAt.toISOString(),
+    };
   } catch (error) {
     console.error("Error al obtener propiedad:", error);
     return null;
