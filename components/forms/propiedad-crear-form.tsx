@@ -437,6 +437,7 @@ export function PropiedadCrearForm({propiedad}) {
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {imagePreviews.map((preview, index) => (
                       <div key={`preview-${index}`} className="relative group">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={preview}
                           alt={`Vista previa ${index + 1}`}

@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllPropiedades } from '@/lib/propiedades'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bafbienesraices.com.ar'
   
   try {
     // Obtener todas las propiedades para generar URLs dinámicas
