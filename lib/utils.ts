@@ -26,6 +26,9 @@ export function constructMetadata({
   const ogImage = image || `${siteConfig.url}/og-image.jpg`;
   
   return {
+    verification: {
+      google: "kM7ICCu20bj35rXv5Kbz4Wg2lceMCbnvVZKoAP59gn8",
+    },
     title: {
       default: title,
       template: title === siteConfig.name ? "%s" : `%s | ${siteConfig.name}`,
