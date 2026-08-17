@@ -107,9 +107,6 @@ export function constructMetadata({
       canonical: siteConfig.url,
     },
     manifest: `${siteConfig.url}/site.webmanifest`,
-    verification: {
-      google: process.env.GOOGLE_SITE_VERIFICATION, // Agregar variable de entorno
-    },
     category: "Real Estate",
     classification: "Business",
     other: {
