@@ -8,7 +8,7 @@ export const metadata = settingsMetadata;
 export default async function SettingsPageRoute() {
   const user = await getCurrentUser();
 
-  if (!user?.id) redirect("/login");
+  if (!user?.id) redirect("/");
 
   return (
     <SettingsPage user={{ 

@@ -22,8 +22,7 @@ export const {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/login",
-    error: "/auth/error",
+    signIn: "/",
   },
   callbacks: {
     async session({ token, session }) {

@@ -65,9 +65,8 @@ export default function PropiedadesPage() {
     { label: "Propiedades", href: "/propiedades" }
   ]
 
-  // Separar propiedades disponibles y vendidas
+  // Solo mostrar propiedades disponibles
   const disponibles = propiedades.filter(p => !p.estaVendida)
-  const vendidas = propiedades.filter(p => p.estaVendida)
 
   return (
     <>
@@ -90,14 +89,10 @@ export default function PropiedadesPage() {
             Descubre nuestro catálogo completo de propiedades. Desde acogedoras casas familiares hasta modernos departamentos, 
             tenemos la propiedad perfecta para ti.
           </p>
-          <div className="flex justify-center gap-4 text-sm">
+          <div className="flex justify-center gap-2 text-sm">
             <span className="flex items-center gap-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               {disponibles.length} Disponibles
-            </span>
-            <span className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              {vendidas.length} Vendidas
             </span>
           </div>
         </div>
@@ -116,22 +111,8 @@ export default function PropiedadesPage() {
           </section>
         )}
 
-        {/* Propiedades Vendidas */}
-        {vendidas.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-heading mb-8 text-red-700 dark:text-red-400">
-              Propiedades Vendidas ({vendidas.length})
-            </h2>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {vendidas.map((propiedad) => (
-                <PropertyCard key={propiedad.id} propiedad={propiedad} />
-              ))}
-            </div>
-          </section>
-        )}
-
         {/* Si no hay propiedades */}
-        {propiedades.length === 0 && (
+        {disponibles.length === 0 && (
           <div className="text-center py-16">
             <Icons.home className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
             <h2 className="text-2xl font-heading mb-2">No hay propiedades disponibles</h2>

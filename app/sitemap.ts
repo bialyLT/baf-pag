@@ -8,13 +8,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Obtener todas las propiedades para generar URLs dinámicas
     const propiedades = await getAllPropiedades()
     
-    // URLs de propiedades dinámicas
-    const propiedadUrls: MetadataRoute.Sitemap = propiedades.map((propiedad) => ({
-      url: `${baseUrl}/propiedades/${propiedad.id}`,
-      lastModified: new Date(propiedad.updatedAt),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }))
+    // URLs de propiedades dinámicas (excluir vendidas, que están noindexed)
+    const propiedadUrls: MetadataRoute.Sitemap = propiedades
+      .filter((propiedad) => !propiedad.estaVendida)
+      .map((propiedad) => ({
+        url: `${baseUrl}/propiedades/${propiedad.id}`,
+        lastModified: new Date(propiedad.updatedAt),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      }))
 
     // URLs estáticas principales
     const staticUrls: MetadataRoute.Sitemap = [

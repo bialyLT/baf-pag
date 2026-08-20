@@ -16,7 +16,7 @@ export async function getDashboardUser(): Promise<DashboardUser> {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/");
   }
 
   if (user.role !== "ADMIN") {

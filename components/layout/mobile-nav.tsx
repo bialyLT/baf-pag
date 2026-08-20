@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -10,12 +10,14 @@ import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/shared/icons";
+import { ModalContext } from "@/components/modals/providers";
 
 import { ModeToggle } from "./mode-toggle";
 export function NavMobile() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const selectedLayout = useSelectedLayoutSegment();
+  const { setShowSignInModal } = useContext(ModalContext);
 
   const links = marketingConfig.mainNav;
 
@@ -91,21 +93,16 @@ export function NavMobile() {
           ) : (
             <>
               <li className="rounded-lg text-foreground hover:bg-muted p-2">
-                <Link
-                  href="/login"
-                  onClick={() => setOpen(false)}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    setShowSignInModal(true);
+                  }}
+                  className="w-full text-left"
                 >
                   <p className="text-sm">Iniciar sesión</p>
-                </Link>
-              </li>
-
-              <li className="rounded-lg text-foreground hover:bg-muted p-2">
-                <Link
-                  href="/register"
-                  onClick={() => setOpen(false)}
-                >
-                  <p className="text-sm">Registrarse</p>
-                </Link>
+                </button>
               </li>
             </>
           )}
