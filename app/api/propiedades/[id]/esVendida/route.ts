@@ -1,8 +1,13 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function PATCH(req: Request) {
+    if (!checkRateLimit(req, "esvendida")) {
+        return new NextResponse('Demasiados pedidos', { status: 429 });
+    }
+
     const check = await requireAdmin();
     if (!check.authorized) {
         return new NextResponse('No autorizado', { status: check.status });

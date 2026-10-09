@@ -2,12 +2,17 @@ import { NextResponse } from "next/server";
 import { normalizeTitle } from "@/lib/utils";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinary";
 import { requireAdmin } from "@/lib/api-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILES = 10;
 
 export async function POST(req: Request) {
+  if (!checkRateLimit(req, "upload")) {
+    return NextResponse.json({ message: "Demasiados pedidos", success: false }, { status: 429 });
+  }
+
   const check = await requireAdmin();
   if (!check.authorized) {
     return NextResponse.json({ message: "No autorizado", success: false }, { status: check.status });

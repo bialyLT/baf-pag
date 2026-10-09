@@ -3,8 +3,13 @@ import { normalizeTitle } from "@/lib/utils";
 import { deleteFromCloudinary, deleteSpecificImagesFromCloudinary } from "@/lib/cloudinary";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function DELETE(req: Request) {
+    if (!checkRateLimit(req, "propiedad-id")) {
+        return new NextResponse('Demasiados pedidos', { status: 429 });
+    }
+
     const check = await requireAdmin();
     if (!check.authorized) {
         return new NextResponse('No autorizado', { status: check.status });
@@ -44,6 +49,10 @@ export async function DELETE(req: Request) {
 }
 
 export async function PATCH(req: Request) {
+    if (!checkRateLimit(req, "propiedad-id")) {
+        return new NextResponse('Demasiados pedidos', { status: 429 });
+    }
+
     const check = await requireAdmin();
     if (!check.authorized) {
         return new NextResponse('No autorizado', { status: check.status });
