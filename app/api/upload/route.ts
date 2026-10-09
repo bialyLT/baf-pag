@@ -1,11 +1,28 @@
 import { NextResponse } from "next/server";
 import { normalizeTitle } from "@/lib/utils";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinary";
+import { requireAdmin } from "@/lib/api-auth";
+
+const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILES = 10;
 
 export async function POST(req: Request) {
+  const check = await requireAdmin();
+  if (!check.authorized) {
+    return NextResponse.json({ message: "No autorizado", success: false }, { status: check.status });
+  }
+
   try {
     const data = await req.formData();
-    const propiedadTitle = normalizeTitle(data.getAll('id')[0] as string);
+    const rawId = data.getAll('id')[0] as string;
+    if (!rawId || !/^[a-zA-Z0-9-]{1,64}$/.test(rawId)) {
+      return NextResponse.json(
+        { message: "Identificador inválido", success: false },
+        { status: 400 }
+      );
+    }
+    const propiedadTitle = normalizeTitle(rawId);
     const isFirstBatch = data.get('isFirstBatch') === 'true';
 
     // Solo eliminar imágenes anteriores en el PRIMER lote
@@ -38,6 +55,10 @@ export async function POST(req: Request) {
           'arrayBuffer' in value) {
         
         const file = value as File;
+        if (!ALLOWED_MIME.has(file.type) || file.size <= 0 || file.size > MAX_FILE_SIZE) {
+          console.log(`⚠️ Archivo rechazado: ${file.name} (${file.type}, ${Math.round(file.size/1024)}KB)`);
+          continue;
+        }
         console.log(`📁 Archivo detectado: ${file.name} (${Math.round(file.size/1024)}KB, ${file.type})`);
         fileEntries.push({ key, file });
       }
@@ -45,7 +66,14 @@ export async function POST(req: Request) {
 
     if (fileEntries.length === 0) {
       return NextResponse.json(
-        { message: "No se encontraron archivos para subir", success: false },
+        { message: "No se encontraron archivos válidos para subir", success: false },
+        { status: 400 }
+      );
+    }
+
+    if (fileEntries.length > MAX_FILES) {
+      return NextResponse.json(
+        { message: "Demasiados archivos en un solo pedido", success: false },
         { status: 400 }
       );
     }
@@ -135,15 +163,11 @@ export async function POST(req: Request) {
     }
   } catch (error: any) {
     console.error('❌ Error subiendo archivos a Cloudinary:', error);
-    console.error('❌ Stack trace:', error.stack);
     
     return NextResponse.json(
       { 
         message: "Error interno del servidor", 
         success: false,
-        error: error.message,
-        // Solo en desarrollo, no en producción
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
       },
       { status: 500 }
     );

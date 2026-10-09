@@ -1,7 +1,13 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/api-auth";
 
 export async function PATCH(req: Request) {
+    const check = await requireAdmin();
+    if (!check.authorized) {
+        return new NextResponse('No autorizado', { status: check.status });
+    }
+
     try {
         // Extraer el ID de la URL
         const url = new URL(req.url);

@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { requireAdmin } from "@/lib/api-auth";
 
 export async function DELETE(req: Request) {
+  const check = await requireAdmin();
+  if (!check.authorized) {
+    return NextResponse.json({ message: "No autorizado" }, { status: check.status });
+  }
+
   try {
     console.log('🧹 Iniciando limpieza de propiedades con imágenes incorrectas...');
     
@@ -83,10 +89,9 @@ export async function DELETE(req: Request) {
   } catch (error) {
     console.error('❌ Error durante la limpieza:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: "Error durante la limpieza", 
-        error: error.message 
+      {
+        success: false,
+        message: "Error durante la limpieza",
       },
       { status: 500 }
     );

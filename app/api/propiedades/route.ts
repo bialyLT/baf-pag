@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from 'next/server';
 import { getAllPropiedades } from "@/lib/propiedades";
+import { requireAdmin } from "@/lib/api-auth";
 
 export async function GET(req: Request) {
   try {
@@ -13,6 +14,11 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+    const check = await requireAdmin();
+    if (!check.authorized) {
+      return NextResponse.json({ message: "No autorizado" }, { status: check.status });
+    }
+
     const formData = await req.formData();
   try {
 
