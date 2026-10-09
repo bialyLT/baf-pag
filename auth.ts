@@ -25,6 +25,14 @@ export const {
     signIn: "/",
   },
   callbacks: {
+    async authorized({ auth, request }) {
+      const pathname = request.nextUrl.pathname;
+      if (pathname.startsWith("/panel-de-control")) {
+        return auth?.user?.role === "ADMIN";
+      }
+      return true;
+    },
+
     async session({ token, session }) {
       if (session.user) {
         if (token.sub) {
