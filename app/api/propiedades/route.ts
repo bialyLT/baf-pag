@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from 'next/server';
 import { getAllPropiedades } from "@/lib/propiedades";
+import { requireAdmin } from "@/lib/api-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function GET(req: Request) {
   try {
@@ -13,6 +15,15 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+    if (!checkRateLimit(req, "propiedades")) {
+      return NextResponse.json({ message: "Demasiados pedidos" }, { status: 429 });
+    }
+
+    const check = await requireAdmin();
+    if (!check.authorized) {
+      return NextResponse.json({ message: "No autorizado" }, { status: check.status });
+    }
+
     const formData = await req.formData();
   try {
 

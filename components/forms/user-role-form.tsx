@@ -34,7 +34,7 @@ interface UserNameFormProps {
 }
 
 export function UserRoleForm({ user }: UserNameFormProps) {
-  const { update } = useSession();
+  const { update, data: session } = useSession();
   const [updated, setUpdated] = useState(false);
   const [isPending, startTransition] = useTransition();
   const updateUserRoleWithId = updateUserRole.bind(null, user.id);
@@ -48,6 +48,10 @@ export function UserRoleForm({ user }: UserNameFormProps) {
       role: role,
     },
   });
+
+  if (session && session.user?.role !== "ADMIN") {
+    return null;
+  }
 
   const onSubmit = (data: z.infer<typeof userRoleSchema>) => {
     startTransition(async () => {

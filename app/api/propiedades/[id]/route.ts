@@ -2,13 +2,23 @@ import { prisma } from "@/lib/db";
 import { normalizeTitle } from "@/lib/utils";
 import { deleteFromCloudinary, deleteSpecificImagesFromCloudinary } from "@/lib/cloudinary";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/api-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function DELETE(req: Request) {
+    if (!checkRateLimit(req, "propiedad-id")) {
+        return new NextResponse('Demasiados pedidos', { status: 429 });
+    }
+
+    const check = await requireAdmin();
+    if (!check.authorized) {
+        return new NextResponse('No autorizado', { status: check.status });
+    }
+
     try {
         // Extraer el ID de la URL
         const url = new URL(req.url);
         const id = Number(url.pathname.split('/').pop());
-        const titleParam = url.searchParams.get('title');
         
         if (!id) {
             return new NextResponse('ID no proporcionado', { status: 400 });
@@ -22,8 +32,9 @@ export async function DELETE(req: Request) {
         });
 
         // Eliminar las imágenes de Cloudinary usando el título de la propiedad eliminada
+        // (siempre desde la DB, nunca desde el query param `title`)
         try {
-            const propiedadTitle = normalizeTitle(titleParam || deletedPropiedad.title);
+            const propiedadTitle = normalizeTitle(deletedPropiedad.title);
             await deleteFromCloudinary(propiedadTitle);
             console.log(`🗑️ Imágenes eliminadas de Cloudinary para: ${propiedadTitle}`);
         } catch (error) {
@@ -38,7 +49,15 @@ export async function DELETE(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-    
+    if (!checkRateLimit(req, "propiedad-id")) {
+        return new NextResponse('Demasiados pedidos', { status: 429 });
+    }
+
+    const check = await requireAdmin();
+    if (!check.authorized) {
+        return new NextResponse('No autorizado', { status: check.status });
+    }
+
     const formData = await req.formData();
     try {
         // Extraer el ID de la URL
